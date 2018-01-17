@@ -1,0 +1,1383 @@
+<?xml version="1.0"?>
+<xsd:schema targetNamespace="/mt/apps/gpms/xsd/SpatialReferenceInformation"
+            xmlns:sri="/mt/apps/gpms/xsd/SpatialReferenceInformation"
+            xmlns:mtag="/mt/apps/gpms/xsd/MiscTypesAndGroups"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xdb="http://xmlns.oracle.com/xdb">
+
+  <xsd:import namespace="/mt/apps/gpms/xsd/MiscTypesAndGroups" 
+              schemaLocation="/mt/apps/gpms/xsd/MiscTypesAndGroups.xsd"/>
+
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+      Name:  SpatialReferenceInformation.xsd
+      Authors:  James W. Allor, Matthew J. McCready
+      Date:  20050315
+      Description:  Validating XML Schema for the Spatial Reference
+                    Information section. Please reference the Census 
+                    Bureau Geospatial Product Metadata Standard (GPMS),
+                    Table 1.
+      Modification History:
+        Initial    Date    Change Request ID    Description
+        JWA      20050315   N/A                 Initial Version
+        JWA      20051117   N/A                 Updated to reflect current GPMS Table 1.
+        JWA      20051201   N/A                 Added types and attributes
+                                                 for Oracle XML DB.
+        JWA      20051215   N/A                 Changed xsd:string to mtag:vstring
+                                                 to validate elements have a value.
+        MMC      20071205   N/A                 Modified the following elements so that 
+                                                 they have to have a minimum string length
+                                                 of 1 character.Latitude_Resolution, 
+                                                 Longitude_Resolution, Abscissa_Resolution
+                                                 Local_Description, Local_Georeference_Information
+        MMC      20071206   N/A                  Fixed all the False_Easting and False_Northing 
+                                                  for the Alber_Conical_Equal_Area, 
+                                                  Azimuthal_Equidistant
+                                                  Equidistant_Conic, Equirectangular,
+                                                  General_Vertical_Near-sided_Perspective,
+                                                  Gnomic, Lambert_Azmuthal_Equal_Area
+                                                  Lambert_Conformal_Conic, Mercator,
+                                                  Modified_Stereographic_for_Alaska,
+                                                  Miller_Cylindrical, Oblique_Mercator
+                                                  Orthographic, Polar_Stereographic,
+                                                  Polyconic, Robinson, Sinusodal,
+                                                  Space_Oblique_Mercator, Stereographic
+                                                  Transverse_Mercator, van_der_Grinten
+       MMC      20071206                         Fixed the Other_Projection element 
+       MMC      20071210                         Modified Horizontal_Datum_Name and 
+                                                  Ellipsoid name to both have an enumerated
+                                                  list of values and a minimum string length
+       MMC      20071211                         Modified so that Planar_Distance_Units has
+                                                  to have a minimum string length of 1 character.
+       MMC      20080617                         Xpaths modified to reflect the directory
+                                                  structure on node104. 
+        
+       MMC      20110225                         Modified to include the State_Albers 
+       MMC      20110627                         Modified to include Albers_Conical_Equal_Area_for_U.S._Virgin_Islands 
+       MMC      20110718                         Modified the Map_Projection_Name_Type to include an option for 'Albers_Conical_Equal_Area_for_United_States'. Also                                                      included an option for Albers_Conical_Equal_Area_for_United_States compound element under the choice decision                                                          structure under the Map_Projection_Name_Type.                                        
+    </xsd:documentation>
+  </xsd:annotation>
+
+
+  <xsd:complexType name="Map_Type">
+    <xsd:sequence>
+      <xsd:element name="Horizontal_Coordinate_System_Definition">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:choice>
+              <xsd:element name="Planar" type="sri:Planar_Type"
+                           maxOccurs="unbounded"/>
+              <xsd:element name="Local" type="sri:Local_Type"/>
+            </xsd:choice>
+            <xsd:element name="Geodetic_Model" type="sri:Geodetic_Model_Type"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Vector_Type">
+    <xsd:sequence>
+      <xsd:element name="Horizontal_Coordinate_System_Definition">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:choice>
+              <xsd:element name="Geographic" type="sri:Geographic_Type"/>
+              <xsd:element name="Planar" type="sri:Planar_Type"
+                           maxOccurs="unbounded"/>
+              <xsd:element name="Local" type="sri:Local_Type"/>
+            </xsd:choice>
+            <xsd:element name="Geodetic_Model" type="sri:Geodetic_Model_Type"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Repository_Type">
+    <xsd:complexContent>
+      <xsd:extension base="sri:Vector_Type"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+
+<!-- Major Section Complex Types -->
+
+  <xsd:complexType name="Geographic_Type">
+    <xsd:sequence>
+
+      <xsd:element name="Latitude_Resolution">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+           <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+       </xsd:element>
+
+      <xsd:element name="Longitude_Resolution">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+           <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+       </xsd:element>
+        
+      <xsd:element name="Geographic_Coordinate_Units"
+                   type="sri:Geographic_Coordinate_Units_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Planar_Type">
+    <xsd:sequence>
+      <xsd:choice>
+
+      	<xsd:element name="Map_Projection">
+      		<xsd:complexType> 
+            <xsd:sequence>
+              <xsd:element name="Map_Projection_Name"
+                           type="sri:Map_Projection_Name_Type"/>
+        			<xsd:choice>
+                <xsd:element name="Albers_Conical_Equal_Area"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                 <!-- <xsd:element name="Albers_Conical_Equal_Area_Delaware"
+                             type="sri:Albers_Conical_Equal_Area_Type_Delaware"/> -->
+                <xsd:element name="Albers_Conical_Equal_Area_for_Alabama"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Alaska"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_American_Samoa"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Samoa"
+                             type="sri:Albers_Conical_Equal_Area_Type"/> 
+                 <xsd:element name="Albers_Conical_Equal_Area_for_Arizona"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                 <xsd:element name="Albers_Conical_Equal_Area_for_Arkansas"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                 <xsd:element name="Albers_Conical_Equal_Area_for_California"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                 <xsd:element name="Albers_Conical_Equal_Area_for_Colorado"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                 <xsd:element name="Albers_Conical_Equal_Area_for_Connecticut"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                 <!-- original try -->  
+                <xsd:element name="Albers_Conical_Equal_Area_for_Delaware"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                 <!-- original try -->
+                 <xsd:element name="Albers_Conical_Equal_Area_for_District_of_Columbia"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Federated_States_of_Micronesia"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Florida"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Georgia"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Guam"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Hawaii"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Idaho"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Illinois"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Indiana"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Iowa"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Kansas"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Kentucky"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Louisiana"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Maine"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Marshall_Islands"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Maryland"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Massachusetts"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Michigan"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Minnesota"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Mississippi"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Missouri"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Montana"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Nebraska"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_Nevada"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <xsd:element name="Albers_Conical_Equal_Area_for_New_Hampshire"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_New_Jersey"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_New_Mexico"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_New_York"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_North_Carolina"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_North_Dakota"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Northern_Mariana_Islands"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_N._Mariana_Islands"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Ohio"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Oklahoma"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Oregon"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Palau"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Pennsylvania"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Puerto_Rico"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Rhode_Island"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_South_Carolina"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_South_Dakota"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Tennessee"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Texas"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Utah"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Vermont"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Virgin_Islands"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_U.S._Virgin_Islands"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_United_States"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Virginia"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Washington"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_West_Virginia"
+                             type="sri:Albers_Conical_Equal_Area_Type"/> 
+               <xsd:element name="Albers_Conical_Equal_Area_for_Wisconsin"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+               <xsd:element name="Albers_Conical_Equal_Area_for_Wyoming"
+                             type="sri:Albers_Conical_Equal_Area_Type"/>
+                <!-- end of state Albers -->   
+                <xsd:element name="Azimuthal_Equidistant"
+                             type="sri:Azimuthal_Equidistant_Type"/> 
+                <xsd:element name="Equidistant_Conic"
+                             type="sri:Equidistant_Conic_Type"/>
+                <xsd:element name="Equirectangular"
+                             type="sri:Equirectangular_Type"/>
+                <xsd:element name="General_Vertical_Near-sided_Perspective"
+                             type="sri:General_Vertical_Near-sided_Perspective_Type"/>
+                <xsd:element name="Gnomonic"
+                             type="sri:Gnomonic_Type"/>
+                <xsd:element name="Lambert_Azimuthal_Equal_Area"
+                             type="sri:Lambert_Azimuthal_Equal_Area_Type"/>
+                <xsd:element name="Lambert_Conformal_Conic"
+                             type="sri:Lambert_Conformal_Conic_Type"/>
+                <xsd:element name="Mercator" type="sri:Mercator_Type"/>
+                <xsd:element name="Modified_Stereographic_for_Alaska"
+                             type="sri:Modified_Stereographic_for_Alaska_Type"/>
+                <xsd:element name="Miller_Cylindrical"
+                             type="sri:Miller_Cylindrical_Type"/>
+                <xsd:element name="Oblique_Mercator"
+                             type="sri:Oblique_Mercator_Type"/>
+                <xsd:element name="Orthographic" type="sri:Orthographic_Type"/>
+                <xsd:element name="Polar_Stereographic"
+                             type="sri:Polar_Stereographic_Type"/>
+                <xsd:element name="Polyconic" type="sri:Polyconic_Type"/>
+                <xsd:element name="Robinson" type="sri:Robinson_Type"/>
+                <xsd:element name="Sinusoidal" type="sri:Sinusoidal_Type"/>
+                <xsd:element name="Space_Oblique_Mercator"
+                             type="sri:Space_Oblique_Mercator_Landsat_Type"/>
+                <xsd:element name="Stereographic" type="sri:Stereographic_Type"/>
+                <xsd:element name="Transverse_Mercator"
+                             type="sri:Transverse_Mercator_Type"/>
+                <xsd:element name="van_der_Grinten" type="sri:van_der_Grinten_Type"/> 
+                <xsd:element name="Other_Projections_Definition" type="sri:Other_Projections_Definition_Type"/>
+              </xsd:choice>
+            </xsd:sequence>
+       		</xsd:complexType>
+      	</xsd:element>
+
+        <xsd:element name="Grid_Coordinate_System">      
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Grid_Coordinate_System_Name"
+                           type="sri:Grid_Coordinate_System_Name_Type"/>
+                <xsd:choice>
+                  <xsd:element name="Universal_Transverse_Mercator"
+                               type="sri:Universal_Transverse_Mercator_Type"/>
+                  <xsd:element name="Universal_Polar_Stereographic"
+                               type="sri:Universal_Polar_Stereographic_Type"/>
+                  <xsd:element name="State_Plane_Coordinate_System"
+                               type="sri:State_Plane_Coordinate_System_Type"/>
+		 <!-- <xsd:element name="State_Plane_Coordinate_System 1927"
+                               type="sri:State_Plane_Coordinate_System_Type"/-->
+		 <xsd:element name="State_Plane_Coordinate_System_1927"
+                               type="sri:State_Plane_Coordinate_System_1927_Type"/>	       
+		  <xsd:element name="State_Plane_Coordinate_System_1983"
+                               type="sri:State_Plane_Coordinate_System_1983_Type"/>       	       
+                  <xsd:element name="ARC_Coordinate_System"
+                               type="sri:ARC_Coordinate_System_Type"/>
+                  <xsd:element name="Other_Grid_Systems_Definition"
+                               type="mtag:vstring"/>
+		<xsd:element name="other_grid_system_Definition"
+                               type="mtag:vstring"/>	       
+                </xsd:choice>
+              </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+
+      </xsd:choice>       
+      <xsd:element name="Planar_Coordinate_Encoding_Method"
+                   type="sri:Planar_Coordinate_Encoding_Method_Type"/>
+
+      <xsd:element name="Abscissa_Resolution">
+       <xsd:simpleType>
+         <xsd:restriction base="mtag:vstring">
+           <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+       </xsd:element>
+
+      <xsd:element name="Ordinate_Resolution" type="mtag:positiveFloat"/>
+      <xsd:element name="Planar_Distance_Units"
+                   type="sri:Planar_Distance_Units_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Local_Type">
+    <xsd:sequence>
+
+      <xsd:element name="Local_Description">
+        <xsd:simpleType>
+         <xsd:restriction base="mtag:vstring">
+           <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+       </xsd:element>
+
+      <xsd:element name="Local_Georeference_Information">
+        <xsd:simpleType>
+         <xsd:restriction base="mtag:vstring">
+           <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+       </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Geodetic_Model_Type">
+    <xsd:sequence>
+      <xsd:element name="Horizontal_Datum_Name"
+                   type="sri:Horizontal_Datum_Name_Type"/>
+      <xsd:element name="Ellipsoid_Name" type="sri:Ellipsoid_Name_Type"/>
+      <xsd:element name="Semi-Major_Axis" type="mtag:positiveFloat"/>
+      <xsd:element name="Denominator_of_Flattening_Ratio"
+                   type="mtag:positiveFloat"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+<!-- Map Projection Types -->
+  
+	<xsd:simpleType name="Map_Projection_Name_Type">
+		<xsd:union>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Albers Conical Equal Area"/>
+                                         <!-- Albers Conical Equal Area -->
+                                        <xsd:enumeration value="Albers Conical Equal Area for Alabama"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Alaska"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Samoa"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for American Samoa"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Arizona"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Arkansas"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for California"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Colorado"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Connecticut"/> 
+                                        <!-- <xsd:enumeration value="Albers Conical Equal Area (Delaware)"/> -->
+                                        <xsd:enumeration value="Albers Conical Equal Area for Delaware"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for District of Columbia"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Federated States of Micronesia"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Florida"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Georgia"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Guam"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Hawaii"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Idaho"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Illinois"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Indiana"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Iowa"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Kansas"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Kentucky"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Louisiana"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Maine"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Marshall Islands"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Maryland"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Massachusetts"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Michigan"/> 
+                                        <xsd:enumeration value="Albers Conical Equal Area for Minnesota"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Mississippi"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Missouri"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Montana"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Nebraska"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Nevada"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for New Hampshire"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for New Jersey"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for New Mexico"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for New York"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for North Carolina"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for North Dakota"/> 
+                                        <xsd:enumeration value="Albers Conical Equal Area for Northern Mariana Islands"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Ohio"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Oklahoma"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Oregon"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Palau"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Pennsylvania"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Puerto Rico"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Rhode Island"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for South Carolina"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for South Dakota"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Tennessee"/> 
+                                        <xsd:enumeration value="Albers Conical Equal Area for Texas"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Utah"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Vermont"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Virgin Islands"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Virgin U.S Islands"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for United States"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Virginia"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Washington"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for West Virginia"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Wisconsin"/>
+                                        <xsd:enumeration value="Albers Conical Equal Area for Wyoming"/>      
+
+                                        <!-- end of Albers Conical Equal Area -->
+					<xsd:enumeration value="Azimuthal Equidistant"/>
+					<xsd:enumeration value="Equidistant Conic"/>
+					<xsd:enumeration value="Equirectangular"/>
+					<xsd:enumeration value="General Vertical Near-sided Perspective"/>
+					<xsd:enumeration value="Gnomonic"/>
+					<xsd:enumeration value="Lambert Azimuthal Equal Area"/>
+					<xsd:enumeration value="Lambert Conformal Conic"/>
+					<xsd:enumeration value="Mercator"/>
+					<xsd:enumeration value="Modified Stereographic for Alaska"/>
+					<xsd:enumeration value="Miller Cylindrical"/>
+					<xsd:enumeration value="Oblique Mercator"/>
+					<xsd:enumeration value="Orthographic"/>
+					<xsd:enumeration value="Polar Stereographic"/>
+					<xsd:enumeration value="Polyconic"/>
+					<xsd:enumeration value="Robinson"/>
+					<xsd:enumeration value="Sinusoidal"/>
+					<xsd:enumeration value="Space Oblique Mercator"/>
+					<xsd:enumeration value="Stereographic"/>
+					<xsd:enumeration value="Transverse Mercator"/>
+					<xsd:enumeration value="van der Grinten"/>
+                                        <xsd:enumeration value="Other Projection"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType>
+				<xsd:restriction base="mtag:vstring"/>
+			</xsd:simpleType>
+		</xsd:union>
+	</xsd:simpleType>
+
+ 
+  <xsd:complexType name="Albers_Conical_Equal_Area_Type">
+    <xsd:sequence>
+      <xsd:element name="Standard_Parallel" type="mtag:Latitude_Type"
+                   minOccurs="2" maxOccurs="2"/>
+      <xsd:element name="Longitude_of_Central_Meridian" 
+                   type="mtag:Longitude_Type"/>
+      <xsd:element name="Latitude_of_Projection_Origin"
+                   type="mtag:Latitude_Type"/>
+
+      <xsd:element name="False_Easting">
+         <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="False_Northing">
+        <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+ <xsd:complexType name="Albers_Conical_Equal_Area_Type_Delaware">
+    <xsd:sequence>
+      <xsd:element name="Standard_Parallel" type="mtag:Latitude_Type"
+                   minOccurs="2" maxOccurs="2"/>
+      <xsd:element name="Longitude_of_Central_Meridian" 
+                   type="mtag:Longitude_Type"/>
+      <xsd:element name="Latitude_of_Projection_Origin"
+                   type="mtag:Latitude_Type"/>
+
+      <xsd:element name="False_Easting">
+         <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="False_Northing">
+        <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType> 
+
+
+  <xsd:complexType name="Azimuthal_Equidistant_Type">
+    <xsd:sequence>
+      <xsd:element name="Longitude_of_Central_Meridian"
+                   type="mtag:Longitude_Type"/>
+      <xsd:element name="Latitude_of_Projection_Origin"
+                   type="mtag:Latitude_Type"/>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="False_Northing">
+        <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+     
+
+  <xsd:complexType name="Equidistant_Conic_Type">
+    <xsd:sequence>
+      <xsd:element name="Standard_Parallel" type="mtag:Latitude_Type"
+                   minOccurs="2" maxOccurs="2"/>
+      <xsd:element name="Longitude_of_Central_Meridian"
+                   type="mtag:Longitude_Type"/>
+      <xsd:element name="Latitude_of_Projection_Origin"
+                   type="mtag:Latitude_Type"/>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>        
+
+      <xsd:element name="False_Northing">
+      <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Equirectangular_Type">
+    <xsd:sequence>
+      <xsd:element name="Standard_Parallel" type="mtag:Latitude_Type"/>
+
+      <xsd:element name="Longitude_of_Central_Meridian">
+        <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="General_Vertical_Near-sided_Perspective_Type">
+    <xsd:sequence>
+      <xsd:element name="Height_of_Perspective_Point_Above_Surface"
+                   type="mtag:positiveFloat"/>
+      <xsd:element name="Longitude_of_Projection_Center"
+                   type="mtag:Longitude_Type"/>
+      <xsd:element name="Latitude_of_Projection_Center"
+                   type="mtag:Latitude_Type"/>
+
+      <xsd:element name="False_Easting">
+        <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Gnomonic_Type">
+    <xsd:sequence>
+      <xsd:element name="Longitude_of_Projection_Center"
+                   type="mtag:Longitude_Type"/>
+      <xsd:element name="Latitude_of_Projection_Center"
+                   type="mtag:Latitude_Type"/>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>        
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Lambert_Azimuthal_Equal_Area_Type">
+    <xsd:sequence>
+      <xsd:element name="Longitude_of_Projection_Center"
+                   type="mtag:Longitude_Type"/>
+      <xsd:element name="Latitude_of_Projection_Center"
+                   type="mtag:Latitude_Type"/>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Lambert_Conformal_Conic_Type">
+    <xsd:sequence>
+      <xsd:element name="Standard_Parallel" type="mtag:Latitude_Type"
+                   minOccurs="2" maxOccurs="2"/>
+      <xsd:element name="Longitude_of_Central_Meridian"
+                   type="mtag:Longitude_Type"/>
+      <xsd:element name="Latitude_of_Projection_Origin"
+                   type="mtag:Latitude_Type"/>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Mercator_Type">
+    <xsd:sequence>
+      <xsd:choice>
+        <xsd:element name="Standard_Parallel"
+                     type="mtag:Latitude_Type"/>
+      	<xsd:element name="Scale_Factor_at_Equator"
+                     type="mtag:positiveFloat"/>
+      </xsd:choice>
+      <xsd:element name="Longitude_of_Central_Meridian"
+                   type="mtag:Longitude_Type"/>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Modified_Stereographic_for_Alaska_Type">
+    <xsd:sequence>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Miller_Cylindrical_Type">
+    <xsd:sequence>
+      <xsd:element name="Longitude_of_Central_Meridian"
+                   type="mtag:Longitude_Type"/>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="False_Northing">
+      <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Oblique_Mercator_Type">
+    <xsd:sequence>
+      <xsd:element name="Scale_Factor_at_Center_Line"
+                   type="mtag:positiveFloat"/>
+      <xsd:choice>
+        <xsd:element name="Oblique_Line_Azimuth">
+      		<xsd:complexType>
+      			<xsd:sequence>
+      				<xsd:element name="Azimuthal_Angle"
+                           type="sri:Azimuthal_Angle_Type"/>
+      				<xsd:element name="Azimuth_Measure_Point_Longitude"
+                           type="mtag:Longitude_Type"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+        </xsd:element>
+      	<xsd:element name="Oblique_Line_Point">
+      		<xsd:complexType>
+      			<xsd:sequence>
+      				<xsd:element name="Oblique_Line_Latitude"
+                           type="mtag:Latitude_Type"/>
+      				<xsd:element name="Oblique_Line_Longitude"
+                           type="mtag:Longitude_Type"/>
+			  	 <xsd:element name="Oblique_Line_Latitude"
+                           type="mtag:Latitude_Type"/>
+      				<xsd:element name="Oblique_Line_Longitude"
+                           type="mtag:Longitude_Type"/>
+      			</xsd:sequence>
+      		</xsd:complexType>
+      	</xsd:element>
+      </xsd:choice>
+      <xsd:element name="Latitude_of_Projection_Origin"
+                   type="mtag:Latitude_Type"/>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Orthographic_Type">
+    <xsd:sequence>
+      <xsd:element name="Longitude_of_Projection_Center"
+                   type="mtag:Latitude_Type"/>
+      <xsd:element name="Latitude_of_Projection_Center"
+                   type="mtag:Latitude_Type"/>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Polar_Stereographic_Type">
+    <xsd:sequence>
+    	<xsd:element name="Straight_Verticle_Longitude_from_Pole"
+                   type="mtag:Longitude_Type"/>
+      <xsd:choice>
+        <xsd:element name="Standard_Parallel" type="mtag:Latitude_Type"/>
+      	<xsd:element name="Scale_Factor_at_Projection_Origin"
+                     type="mtag:positiveFloat"/>
+      </xsd:choice>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Polyconic_Type">
+    <xsd:sequence>
+      <xsd:element name="Longitude_of_Central_Meridian"
+                   type="mtag:Longitude_Type"/>
+      <xsd:element name="Latitude_of_Projection_Origin"
+                   type="mtag:Latitude_Type"/>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+       </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+       </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Robinson_Type">
+    <xsd:sequence>
+      <xsd:element name="Longitude_of_Projection_Center"
+                   type="mtag:Longitude_Type"/>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+       </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+       </xsd:element>
+ 
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Sinusoidal_Type">
+    <xsd:sequence>
+      <xsd:element name="Longitude_of_Central_Meridian"
+                   type="mtag:Longitude_Type"/>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+       </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+       </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Space_Oblique_Mercator_Landsat_Type">
+    <xsd:sequence>
+    	<xsd:element name="Landsat_Number" type="xsd:positiveInteger"/>
+    	<xsd:element name="Path_Number" type="xsd:positiveInteger"/>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+       </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+       </xsd:element>
+
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Stereographic_Type">
+    <xsd:sequence>
+    	<xsd:element name="Longitude_of_Projection_Center"
+                   type="mtag:Longitude_Type"/>
+    	<xsd:element name="Latitude_of_Projection_Center"
+                   type="mtag:Latitude_Type"/>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+       </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+       </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Transverse_Mercator_Type">
+    <xsd:sequence>
+      <xsd:element name="Scale_Factor_at_Central_Meridian"
+                   type="mtag:positiveFloat"/>
+      <xsd:element name="Longitude_of_Central_Meridian"
+                   type="mtag:Longitude_Type"/>		   
+      <xsd:element name="Latitude_of_Projection_Origin"
+                   type="mtag:Latitude_Type"/>
+      
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+       </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+       </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="van_der_Grinten_Type">
+    <xsd:sequence>
+      <xsd:element name="Longitude_of_Central_Meridian"
+                   type="mtag:Longitude_Type"/>
+
+      <xsd:element name="False_Easting">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+       </xsd:element>
+
+      <xsd:element name="False_Northing">
+       <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+       </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+<xsd:complexType name="Other_Projections_Definition_Type">
+<xsd:sequence>
+<xsd:element name="Other_Projections_Definition">
+ <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+       </xsd:element>
+</xsd:sequence>
+</xsd:complexType>
+
+<!-- Grid Coordinate System Types -->
+
+	<xsd:simpleType name="Grid_Coordinate_System_Name_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Universal Transverse Mercator"/>
+			<xsd:enumeration value="Universal Polar Stereographic"/>
+			<!--<xsd:enumeration value="State Plane Coordinate System"/> -->
+			<xsd:enumeration value="State Plane Coordinate System 1927"/>
+			<xsd:enumeration value="State Plane Coordinate System 1983"/>
+			<xsd:enumeration value="ARC Coordinate System"/>
+			<xsd:enumeration value="Other Grid Systems Definition"/>
+			<xsd:enumeration value="other grid system"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+
+  <xsd:complexType name="Universal_Transverse_Mercator_Type">
+    <xsd:sequence>
+      <xsd:element name="UTM_Zone_Number"
+                   type="sri:UTM_Zone_Number_Type"/>
+      <xsd:element name="Map_Projection_Name"
+                   type="sri:Map_Projection_Name_Type"/>
+      <xsd:element name="Transverse_Mercator"
+                   type="sri:Transverse_Mercator_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Universal_Polar_Stereographic_Type">
+    <xsd:sequence>
+      <xsd:element name="UPS_Zone_Identifier"
+                   type="sri:UPS_Zone_Identifier_Type"/>
+      <xsd:element name="Map_Projection_Name"
+                   type="sri:Map_Projection_Name_Type"/>
+      <xsd:element name="Polar_Stereographic"
+                   type="sri:Polar_Stereographic_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="State_Plane_Coordinate_System_Type">
+    <xsd:sequence>
+      <xsd:element name="SPCS_Zone_Identifier"
+                   type="sri:SPCS_Zone_Identifier_Type"/>
+      <xsd:element name="Map_Projection_Name"
+                   type="sri:Map_Projection_Name_Type"/>
+      <xsd:choice>
+        <xsd:element name="Lambert_Conformal_Conic"
+                     type="sri:Lambert_Conformal_Conic_Type"/>
+        <xsd:element name="Transverse_Mercator"
+                     type="sri:Transverse_Mercator_Type"/>
+        <xsd:element name="Oblique_Mercator"
+                     type="sri:Oblique_Mercator_Type"/>
+        <xsd:element name="Polyconic" type="sri:Polyconic_Type"/>
+      </xsd:choice>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+<xsd:complexType name="State_Plane_Coordinate_System_1983_Type">
+    <xsd:sequence>
+      <xsd:element name="SPCS_Zone_Identifier"
+                   type="sri:SPCS_Zone_Identifier_Type"/>
+      <xsd:element name="Map_Projection_Name"
+                   type="sri:Map_Projection_Name_Type"/>
+      <xsd:choice>
+        <xsd:element name="Lambert_Conformal_Conic"
+                     type="sri:Lambert_Conformal_Conic_Type"/>
+        <xsd:element name="Transverse_Mercator"
+                     type="sri:Transverse_Mercator_Type"/>
+        <xsd:element name="Oblique_Mercator"
+                     type="sri:Oblique_Mercator_Type"/>
+        <xsd:element name="Polyconic" type="sri:Polyconic_Type"/>
+      </xsd:choice>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+
+<xsd:complexType name="State_Plane_Coordinate_System_1927_Type">
+    <xsd:sequence>
+      <xsd:element name="SPCS_Zone_Identifier"
+                   type="sri:SPCS_Zone_Identifier_Type"/>
+      <xsd:element name="Map_Projection_Name"
+                   type="sri:Map_Projection_Name_Type"/>
+      <xsd:choice>
+        <xsd:element name="Lambert_Conformal_Conic"
+                     type="sri:Lambert_Conformal_Conic_Type"/>
+        <xsd:element name="Transverse_Mercator"
+                     type="sri:Transverse_Mercator_Type"/>
+        <xsd:element name="Oblique_Mercator"
+                     type="sri:Oblique_Mercator_Type"/>
+        <xsd:element name="Polyconic" type="sri:Polyconic_Type"/>
+      </xsd:choice>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  
+  <xsd:complexType name="ARC_Coordinate_System_Type">
+    <xsd:sequence>
+      <xsd:element name="ARC_System_Zone_Identifier"
+                   type="sri:ARC_System_Zone_Identifier_Type"/>
+      <xsd:element name="Map_Projection_Name"
+                   type="sri:Map_Projection_Name_Type"/>
+      <xsd:choice>
+        <xsd:element name="Equirectangular"
+                     type="sri:Equirectangular_Type"/>
+        <xsd:element name="Azimuthal_Equidistant"
+                     type="sri:Azimuthal_Equidistant_Type"/> 
+      </xsd:choice>              
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+<!-- Miscellaneous Types -->
+
+  <xsd:simpleType name="Geographic_Coordinate_Units_Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Decimal degrees"/>
+      <xsd:enumeration value="Decimal minutes"/>
+      <xsd:enumeration value="Decimal seconds"/>
+      <xsd:enumeration value="Degrees and decimal minutes"/>
+      <xsd:enumeration value="Degrees, minutes, and decimal seconds"/>
+      <xsd:enumeration value="Radians"/>
+      <xsd:enumeration value="Grads"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+
+	<xsd:simpleType name="Azimuthal_Angle_Type">
+		<xsd:restriction base="xsd:float">
+			<xsd:minInclusive value="0"/>
+			<xsd:maxExclusive value="360"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+
+  <xsd:simpleType name="Planar_Coordinate_Encoding_Method_Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="coordinate pair"/>
+      <xsd:enumeration value="distance and bearing"/>
+      <xsd:enumeration value="row and column"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+
+  <xsd:simpleType name="Planar_Distance_Units_Type">
+    <xsd:union>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="meters"/>
+          <xsd:enumeration value="international feet"/>
+          <xsd:enumeration value="survey feet"/>
+        </xsd:restriction>
+  		</xsd:simpleType>
+      <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:union>
+  </xsd:simpleType>
+
+
+  <xsd:simpleType name="Horizontal_Datum_Name_Type">
+    <xsd:union>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="North American Datum of 1927"/>
+          <xsd:enumeration value="North American Datum of 1983"/>
+        </xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType>
+				<xsd:restriction base="mtag:vstring">
+                                <xsd:minLength value="1"/>
+                                </xsd:restriction>
+			</xsd:simpleType>
+		</xsd:union>
+  </xsd:simpleType>
+    
+
+  <xsd:simpleType name="Ellipsoid_Name_Type">
+    <xsd:union>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="Clarke 1866"/>
+          <xsd:enumeration value="Geodetic Reference System 80"/>
+        </xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType>
+				<xsd:restriction base="mtag:vstring">
+                                  <xsd:minLength value="1"/>
+                                </xsd:restriction>
+			</xsd:simpleType>
+		</xsd:union>
+  </xsd:simpleType>
+
+
+	<xsd:simpleType name="UTM_Zone_Number_Type">
+    <xsd:union>
+      <xsd:simpleType>
+    		<xsd:restriction base="xsd:integer">
+    			<xsd:minInclusive value="1"/>
+    			<xsd:maxInclusive value="60"/>
+    		</xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType>
+    		<xsd:restriction base="xsd:integer">
+    			<xsd:minInclusive value="-60"/>
+    			<xsd:maxInclusive value="-1"/>
+    		</xsd:restriction>
+      </xsd:simpleType>
+    </xsd:union>
+	</xsd:simpleType>
+
+
+	<xsd:simpleType name="UPS_Zone_Identifier_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="A"/>
+			<xsd:enumeration value="B"/>
+			<xsd:enumeration value="Y"/>
+			<xsd:enumeration value="Z"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+
+	<xsd:simpleType name="SPCS_Zone_Identifier_Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="\d{4}"/>
+    </xsd:restriction>
+	</xsd:simpleType>
+
+
+	<xsd:simpleType name="ARC_System_Zone_Identifier_Type">
+		<xsd:restriction base="xsd:integer">
+			<xsd:minInclusive value="1"/>
+			<xsd:maxInclusive value="18"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+
+</xsd:schema>

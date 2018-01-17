@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema targetNamespace="../xsd/MetadataReferenceInformation" 
+            xmlns:mri="../xsd/MetadataReferenceInformation" 
+            xmlns:ci="../xsd/ContactInformation"
+            xmlns:mtag="../xsd/MiscTypesAndGroups"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xdb="http://xmlns.oracle.com/xdb">
+
+  <xsd:import namespace="../xsd/ContactInformation"
+              schemaLocation="../xsd/ContactInformation.xsd"/>
+  <xsd:import namespace="../xsd/MiscTypesAndGroups"
+              schemaLocation="../xsd/MiscTypesAndGroups.xsd"/>
+ 
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+      Name:  MetadataReferenceInformation.xsd
+      Authors:  James W. Allor, Matthew J. McCready
+      Date:  20050311
+      Description:  Validating XML Schema for the Metadata Reference
+                    Information section. Please reference the Census 
+                    Bureau Geospatial Product Metadata Standard (GPMS),
+                    Table 1.
+      Modification History:
+        Initial   Date     Change Request ID   Description
+        JWA     20050311    N/A                 Initial Version
+        JWA     20051109    N/A                 Updated to reflect current GPMS Table 1.
+        JWA     20051201    N/A                 Added types and attributes
+                                                 for Oracle XML DB.
+        JWA     20051215    N/A                 Changed xsd:string to mtag:vstring
+                                                 to validate elements have a value.
+        MMC     20071206    N/A                 Modified Metadata_Standard_Name,
+                                                 Metadata_Standard_Version and
+                                                 Metadata_File_Identifier so that
+                                                 they have to have a minimum string
+                                                 length of 1 character. 
+        MMC     20080618    N/A                 Xpaths modified to mirror the directory
+                                                 structure on node104. 
+	MMC	20081216    N/A                 The Metadata_Date element was modified so that
+	                                         the date string has to have only 8 characters.
+						 The pattern was also changed to only accept the
+						 YYYYMMDD format.
+        MMC    20100624    N/A                  The Metadata_Date element was changed so that it will
+                                                 accept a minimium of 4 characters and a maximum of 
+                                                 8 characters for all the profile types.   				 
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:complexType name="Planned_Type">
+    <xsd:sequence>
+      <xsd:element name="Metadata_Date">
+      <xsd:simpleType>
+      		<xsd:restriction base="mtag:vstring">
+			<xsd:minLength value="4" />
+			<xsd:maxLength value="8"/>
+			 <xsd:pattern  value="(1|2)[0-9][0-9][0-9].*"/> 
+			<!-- <xsd:pattern  value="(1|2)[0-9][0-9][0-9](0|1)[0-9](0|1|2|3)[0-9]"/> -->
+		</xsd:restriction>
+	</xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="Metadata_Contact" type="ci:All_Mandatory_Type"/>
+
+      <xsd:element name="Metadata_Standard_Name">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element> 
+
+      <xsd:element name="Metadata_Standard_Version">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>       
+
+      <xsd:element name="Metadata_Character_Set" type="mtag:Character_Set_Type"
+                   minOccurs="0"/>
+
+      <xsd:element name="Metadata_File_Identifier" minOccurs="0">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Metadata_Language" type="mtag:Language_Type"
+                   minOccurs="0"/> 
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+
+<xsd:complexType name="IncomingAddress_Type">
+    <xsd:sequence>
+      <xsd:element name="Metadata_Date">
+      <xsd:simpleType>
+                <xsd:restriction base="mtag:vstring">
+                        <xsd:minLength value="4" />
+                        <xsd:maxLength value="8"/>
+                         <xsd:pattern  value="(1|2)[0-9][0-9][0-9].*"/>
+                        <!-- <xsd:pattern  value="(1|2)[0-9][0-9][0-9](0|1)[0-9](0|1|2|3)[0-9]"/> -->
+                </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="Metadata_Contact" minOccurs="0" type="ci:IncomingAddressSec7_Type"/>
+
+      <xsd:element name="Metadata_Standard_Name">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Metadata_Standard_Version">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Legacy_Atlas_Type">
+    <xsd:sequence>
+      <xsd:element name="Metadata_Date">
+      	<xsd:simpleType>
+      		<xsd:restriction base="mtag:vstring">
+			<xsd:minLength value="4" /><!-- was 4 -->
+			<xsd:maxLength value="8"/>
+			 <xsd:pattern  value="(1|2)[0-9][0-9][0-9].*"/> 
+		<!--	<xsd:pattern  value="(1|2)[0-9][0-9][0-9](0|1)[0-9](0|1|2|3)[0-9]"/> -->
+		</xsd:restriction>
+	</xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="Metadata_Contact" type="ci:All_Mandatory_Type"/>
+      
+      <xsd:element name="Metadata_Standard_Name">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Metadata_Standard_Version">
+        <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+
+      <xsd:element name="Metadata_Character_Set" type="mtag:Character_Set_Type"/>
+
+      <xsd:element name="Metadata_File_Identifier">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+
+      <xsd:element name="Metadata_Language" type="mtag:Language_Type"/> 
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Map_Type">
+    <xsd:complexContent>
+      <xsd:extension base="mri:Legacy_Atlas_Type"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="Vector_Type">
+    <xsd:complexContent>
+      <xsd:extension base="mri:Legacy_Atlas_Type"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+ <!-- <xsd:complexType name="Tabular_Type">
+    <xsd:complexContent>
+      <xsd:extension base="mri:Legacy_Atlas_Type"/>
+    </xsd:complexContent>
+  </xsd:complexType> -->
+
+ <xsd:complexType name="Tabular_Type">
+    <xsd:sequence>
+      <xsd:element name="Metadata_Date">
+      	<xsd:simpleType>
+      		<xsd:restriction base="mtag:vstring">
+			<xsd:minLength value="4" />
+			<xsd:maxLength value="8"/>
+			<xsd:pattern  value="(1|2)[0-9][0-9][0-9].*"/> 
+		<!--	<xsd:pattern  value="(1|2)[0-9][0-9][0-9](0|1)[0-9](0|1|2|3)[0-9]"/> -->
+		</xsd:restriction>
+	</xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="Metadata_Contact" type="ci:All_Mandatory_Type"/>
+
+      <xsd:element name="Metadata_Standard_Name">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Metadata_Standard_Version">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Metadata_Character_Set" type="mtag:Character_Set_Type"/>
+
+      <xsd:element name="Metadata_File_Identifier">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Metadata_Language" type="mtag:Language_Type"/> 
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+
+  <xsd:complexType name="Repository_Type">
+    <xsd:complexContent>
+      <xsd:extension base="mri:Legacy_Atlas_Type"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+</xsd:schema>

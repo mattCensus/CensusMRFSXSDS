@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="../xsd/MiscTypesAndGroups"
+            xmlns:mtag="../xsd/MiscTypesAndGroups"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            
+
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+      Name:  MiscTypes.xsd
+      Authors:  James W. Allor, Matthew J. McCready
+      Date:  20050311
+      Description:  XML Schema for validating generic groups and
+                    types used in MRF documents. Please reference
+                    the Census Bureau Geospatial Product Metadata
+                    Standard (GPMS), Table 1.
+      Modification History:
+        Initial    Date    Change Request ID   Description
+        JWA      20050311   N/A                 Initial Version
+        JWA      20051109   N/A                 Updated to reflect current GPMS Table 1.
+        JWA      20051208   N/A                 Added mtag:vstring type.
+        MMC      20080617   N/A                 Xpaths modified to mirror the directory 
+                                                 structure on node104.
+    </xsd:documentation>
+  </xsd:annotation>
+
+
+  <!-- A string with a value. -->
+  <xsd:simpleType name="vstring">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value=".*[0-9A-Za-z].*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <!-- A subset of ISO 19115 B.5.10 MD_CharacterSetCode -->
+  <xsd:simpleType name="Character_Set_Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="8859part1"/> <!-- ISO/IEC 8859-1 -->
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <!-- A subset of ISO 639-2 -->
+  <xsd:simpleType name="Language_Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="eng"/>  <!-- English -->
+      <xsd:enumeration value="fre"/>  <!-- French -->
+      <xsd:enumeration value="spa"/>  <!-- Spanish -->
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="Latitude_Type">
+    <xsd:restriction base="xsd:float">
+      <xsd:minInclusive value="-90"/>
+      <xsd:maxInclusive value="90"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="Longitude_Type">
+    <xsd:restriction base="xsd:float">
+      <xsd:minInclusive value="-180"/>
+      <xsd:maxInclusive value="180"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="positiveFloat">
+    <xsd:restriction base="xsd:float">
+       <xsd:minExclusive value="0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:group name="TimePeriodInformation_Group">
+    <xsd:sequence>
+      <xsd:element name="Beginning_Date" type="mtag:vstring"/>
+      <xsd:element name="Ending_Date" type="mtag:vstring"/>
+    </xsd:sequence>
+  </xsd:group>
+
+</xsd:schema>

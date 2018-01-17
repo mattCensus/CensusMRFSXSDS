@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="../xsd/MiscTypesAndGroups"
+            xmlns:mtag="../xsd/MiscTypesAndGroups"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            
+
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+      Name:  MiscTypesAndGroups.xsd
+      Authors:  James W. Allor, Matthew J. McCready
+      Date:  20050311
+      Description:  XML Schema for validating generic groups and
+                    types used in MRF documents. Please reference
+                    the Census Bureau Geospatial Product Metadata
+                    Standard (GPMS), Table 1.
+      Modification History:
+        Initial    Date    Change Request ID   Description
+        JWA      20050311   N/A                 Initial Version
+        JWA      20051109   N/A                 Updated to reflect current GPMS Table 1. 
+        JWA      20051208   N/A                 Added mtag:vstring type.
+        JWA      20060108   N/A                 Modified vstring reg. exp. because of a java stack overflow.
+        MMC      20071205   N/A                 Modified Beginning_Date and Ending_Date so they have to have a string length of at least 1 character
+        MMC      20080111   N/A                 Modified to accept the edges profile. An edges value was added to the profile_type_Type enumeration list.
+        MMC      20080118   N/A                 Modified to accept the edgesEnhanced profile. An edgesEnhanced value was added to the profile_type_Type enumeration list.
+        MMC      20080617   N/A                 Xpaths modified to mirror the directory structure node104
+        MMC      20150213   N/A                 Added KML to the profile_type_Type simple type 
+        MMC      20160121   N/A                 Modified the Character_Set_Type to accept only UTF-8
+    </xsd:documentation> 
+  </xsd:annotation>
+
+  <xsd:simpleType name="profile_type_Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="planned"/>
+      <xsd:enumeration value="legacy"/>
+      <xsd:enumeration value="atlas"/>
+      <xsd:enumeration value="map"/>
+      <xsd:enumeration value="vector"/>
+      <xsd:enumeration value="tabular"/>
+      <xsd:enumeration value="edges"/>
+      <xsd:enumeration value="edgesEnhanced"/>
+      <xsd:enumeration value="IncomingAddress"/> 
+      <xsd:enumeration value="KML"/>
+      <xsd:enumeration value="kml"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:group name="Time_Period_Information_Group">
+    <xsd:sequence>
+
+      <xsd:element name="Beginning_Date">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>        
+
+      <xsd:element name="Ending_Date">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:group>
+
+  <!-- A non-empty string. -->
+  <xsd:simpleType name="vstring">
+    <xsd:restriction base="xsd:string">
+      <!-- The pattern below would not work because of a java stack
+           overflow.  We may want to change the pattern with a later
+           version of java.  Current java version "1.5.0_04". JWA 20060108
+           <xsd:pattern value="(\s|.)*(\w)(\s|.)*"/> -->
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <!-- A subset of ISO 19115 B.5.10 MD_CharacterSetCode  UTF-8 -->
+  <xsd:simpleType name="Character_Set_Type">
+    <xsd:restriction base="xsd:string">
+     <!--   <xsd:enumeration value="8859part1"/> --><!-- ISO/IEC 8859-1 -->
+      <xsd:enumeration value="UTF-8"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <!-- A subset of ISO 639-2 -->
+  <xsd:simpleType name="Language_Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="eng"/>  <!-- English -->
+      <xsd:enumeration value="fre"/>  <!-- French -->
+      <xsd:enumeration value="spa"/>  <!-- Spanish -->
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="Latitude_Type">
+    <xsd:restriction base="xsd:float">
+      <xsd:minInclusive value="-90"/>
+      <xsd:maxInclusive value="90"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="Longitude_Type">
+    <xsd:restriction base="xsd:float">
+      <xsd:minInclusive value="-180"/>
+      <xsd:maxInclusive value="180"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="positiveFloat">
+    <xsd:restriction base="xsd:float">
+       <xsd:minExclusive value="0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+</xsd:schema>

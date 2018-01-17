@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="../xsd/ContactInformation"
+            xmlns:coni="../xsd/ContactInformation"
+            xmlns:mtag="../xsd/MiscTypesAndGroups"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xdb="http://xmlns.oracle.com/xdb">
+
+  <xsd:import namespace="../xsd/MiscTypesAndGroups" 
+              schemaLocation="../xsd/MiscTypesAndGroups.xsd"/>
+      
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+      Name:  ContactInformation.xsd
+      Authors:  James W. Allor, Matthew J. McCready
+      Date:  20050311
+      Description:  Validating XML Schema for the Contact Information
+                    section. Please reference the Census Bureau Geospatial
+                    Product Metadata Standard (GPMS), Table 1.
+      Modification History:
+        Initial   Date     Change Request ID   Description
+        JWA     20050311    N/A                 Initial Version
+        JWA     20051109    N/A                 Updated to reflect current
+                                                 GPMS Table 1.
+        JWA     20051201    N/A                 Added types and attributes
+                                                 for Oracle XML DB.
+        JWA     20051215    N/A                 Changed xsd:string to mtag:vstring
+                                                 to validate elements have a value.
+        MMC     20071205    N/A                 modified so that all the strings for
+                                                 Address_Type, Address, City, 
+                                                 State_or_Province, Postal_Code,
+                                                 Country, Contact_Voice_Telephone
+                                                 Contact_Facsimile_Telephone,
+                                                 and Contact_Electronic_Mail_Address
+                                                 all have to have a length of at least
+                                                 1.
+        MMC     20080617                        Xpaths modified to mirror the directory 
+                                                 structure on node104.
+        MMC     20100901                       email address modified so that it will only
+                                                accept "geo.tiger@census.gov"
+        MMC     20110121                      email address modified to accept "geo.geography@census.gov"
+                                               and "geo.tiger@census.gov"
+        MMC     20111205		      added geo.tigerweb@census.gov to the list of acceptable email
+                                               addresses.			
+    </xsd:documentation>
+  </xsd:annotation>
+
+<!-- used for the  Contact Information in Section6: Distribution Information -->
+  <xsd:complexType name="Some_Optional_Type">
+    <xsd:sequence>
+
+      <xsd:element name="Contact_Organization">
+        <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+          <xsd:minLength value="1"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Contact_Address" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+      
+            <xsd:element name="Address_Type" fixed="mailing">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="Address" maxOccurs="unbounded">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+             
+
+            <xsd:element name="City">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="State_or_Province">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+             
+
+            <xsd:element name="Postal_Code">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="5"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+
+
+            <xsd:element name="Country">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+
+
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="Contact_Voice_Telephone" maxOccurs="unbounded">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+          <xsd:minLength value="1"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+       </xsd:element>
+
+       
+      <xsd:element name="Contact_Facsimile_Telephone" minOccurs="0">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+       
+
+      <xsd:element name="Contact_Electronic_Mail_Address" minOccurs="0">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+         <xsd:enumeration value="geo.tiger@census.gov"/> 
+        <xsd:enumeration value="geo.geography@census.gov"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+  
+
+    </xsd:sequence>
+  </xsd:complexType> 
+
+
+
+<xsd:complexType name="IncomingAddressSec7_Type">
+
+ <xsd:sequence>
+
+      <xsd:element name="Contact_Organization">
+        <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+          <xsd:minLength value="1"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+     <xsd:element name="Contact_Address" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+
+            <xsd:element name="Address_Type" fixed="mailing">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="Address" maxOccurs="unbounded">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+<xsd:element name="City">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+ 
+            <xsd:element name="State_or_Province">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+
+
+            <xsd:element name="Postal_Code">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="5"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+
+
+            <xsd:element name="Country">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+
+
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+
+
+      <xsd:element name="Contact_Voice_Telephone" maxOccurs="unbounded">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+          <xsd:minLength value="1"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+       </xsd:element>
+
+<!-- <xsd:element name="Contact_Electronic_Mail_Address" minOccurs="0">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+         <xsd:enumeration value="geo.tiger@census.gov"/>
+        <xsd:enumeration value="geo.geography@census.gov"/> 
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element> -->
+
+
+    </xsd:sequence>
+
+
+</xsd:complexType>
+
+
+
+<xsd:complexType name="IncomingAddressSec1_Type">
+
+ <xsd:sequence>
+
+      <xsd:element name="Contact_Organization">
+        <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+          <xsd:minLength value="1"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+     <xsd:element name="Contact_Address" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+
+            <xsd:element name="Address_Type" fixed="mailing">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="Address" maxOccurs="unbounded">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+
+
+            <xsd:element name="City">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="State_or_Province">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+
+
+            <xsd:element name="Postal_Code">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="5"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+
+
+            <xsd:element name="Country">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+
+
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+ 
+      
+
+      <xsd:element name="Contact_Voice_Telephone" maxOccurs="unbounded">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+          <xsd:minLength value="1"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+       </xsd:element>
+
+
+      <xsd:element name="Contact_Facsimile_Telephone" minOccurs="0">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+
+      <xsd:element name="Contact_Electronic_Mail_Address" minOccurs="0">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+    <!--     <xsd:enumeration value="geo.tiger@census.gov"/>
+        <xsd:enumeration value="geo.geography@census.gov"/> -->
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element> 
+
+
+    </xsd:sequence>
+
+
+</xsd:complexType>
+
+<!-- used for the Contact Information in Sections 1 and 7 -->
+ <xsd:complexType name="All_Mandatory_Type">
+    <xsd:sequence>
+
+      <xsd:element name="Contact_Organization">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Contact_Address" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+
+            <xsd:element name="Address_Type" fixed="mailing">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+            </xsd:element>
+
+            <xsd:element name="Address" maxOccurs="unbounded">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+            </xsd:element>
+
+            <xsd:element name="City">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+            </xsd:element>             
+
+            <xsd:element name="State_or_Province">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+            </xsd:element>
+ 
+            <xsd:element name="Postal_Code">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="5"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+            </xsd:element>
+
+            <xsd:element name="Country">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+            </xsd:element>
+
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="Contact_Voice_Telephone" maxOccurs="unbounded">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+          <xsd:minLength value="1"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Contact_Facsimile_Telephone">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+          <xsd:minLength value="1"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      
+
+      <xsd:element name="Contact_Electronic_Mail_Address">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+          <xsd:minLength value="1"/>
+           <xsd:enumeration value="geo.tiger@census.gov"/>
+           <xsd:enumeration value="geo.geography@census.gov"/>
+           <xsd:enumeration value="geo.tigerweb@census.gov"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+</xsd:schema>

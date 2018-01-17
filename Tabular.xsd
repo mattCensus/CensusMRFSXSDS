@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:ii="../xsd/IdentificationInformation"
+            xmlns:dqi="../xsd/DataQualityInformation"
+            xmlns:eaai="../xsd/EntityAndAttributeInformation"
+            xmlns:di="../xsd/DistributionInformation"
+            xmlns:mri="../xsd/MetadataReferenceInformation"
+            xmlns:mtag="../xsd/MiscTypesAndGroups"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xdb="http://xmlns.oracle.com/xdb">
+
+  <xsd:import namespace="../xsd/IdentificationInformation"
+              schemaLocation="../xsd/IdentificationInformation.xsd"/>
+  <xsd:import namespace="../xsd/DataQualityInformation"
+              schemaLocation="../xsd/DataQualityInformation.xsd"/>
+  <xsd:import namespace="../xsd/EntityAndAttributeInformation"
+              schemaLocation="../xsd/EntityAndAttributeInformation.xsd"/>
+  <xsd:import namespace="../xsd/DistributionInformation"
+              schemaLocation="../xsd/DistributionInformation.xsd"/>
+  <xsd:import namespace="../xsd/MetadataReferenceInformation"
+              schemaLocation="../xsd/MetadataReferenceInformation.xsd"/>
+  <xsd:import namespace="../xsd/MiscTypesAndGroups" 
+              schemaLocation="../xsd/MiscTypesAndGroups.xsd"/>
+
+  <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+          Name:  Tabular.xsd
+          Authors:  James W. Allor, Matthew J. McCready
+          Date:  20051128
+          Description: XML schema to validate MRF documents using the Tabular profile.
+          Please reference the GPMS, Table 1.
+
+          Modification History:
+              Initial        Date        Change Request ID      Description
+              JWA            20051128    N/A                    Initial version
+              MMC            20080617    N/A                    Xpaths modified to mirror the
+                                                                 directory structure on node104. 
+                                                       
+      </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:element name="MRF">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Identification_Information" type="ii:Tabular_Type"/>
+        <xsd:element name="Data_Quality_Information" type="dqi:Tabular_Type"/>
+        <xsd:element name="Entity_and_Attribute_Information" type="eaai:Tabular_Type"/>
+        <xsd:element name="Distribution_Information" type="di:Tabular_Type"/>
+        <xsd:element name="Metadata_Reference_Information" type="mri:Tabular_Type"/>
+      </xsd:sequence>
+      <xsd:attribute name="profile_type" type="mtag:profile_type_Type"/>
+    </xsd:complexType>
+  </xsd:element>
+
+</xsd:schema>

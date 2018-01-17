@@ -1,0 +1,692 @@
+<?xml version="1.0"?>
+<xsd:schema targetNamespace="../xsd/DataQualityInformation"
+            xmlns:dqi="../xsd/DataQualityInformation"         
+            xmlns:citi="../xsd/CitationInformation"
+            xmlns:mtag="../xsd/MiscTypesAndGroups"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xdb="http://xmlns.oracle.com/xdb">
+
+  <xsd:import namespace="../xsd/CitationInformation" 
+              schemaLocation="../xsd/CitationInformation.xsd"/>
+
+  <xsd:import namespace="../xsd/MiscTypesAndGroups" 
+              schemaLocation="../xsd/MiscTypesAndGroups.xsd"/>
+
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+      Name:  DataQualityInformation.xsd
+      Authors:  James W. Allor, Matthew J. McCready
+      Date:  20050314
+      Description:  Validating XML Schema for the Data Quality 
+                    Information section. Please reference the Census 
+                    Bureau Geospatial Product Metadata Standard (GPMS),
+                    Table 1.
+      Modification History:
+        Initial    Date    Change Request ID   Description
+        JWA      20050314   N/A                 Initial version
+        JWA      20051110   N/A                 Updated to reflect current GPMS Table 1.
+        JWA      20051201   N/A                 Added types and attributes
+                                                 for Oracle XML DB.
+        JWA      20051215   N/A                 Changed xsd:string to mtag:vstring
+                                                 to validate elements have a value.
+
+        MMC      20071204   N/A                  Made Horizontal_Positional_Accuraccy_Report_Optional
+        MMC      20071205   N/A                 Modified Attribute_Accuracy_Report, Logical_Consistency_Report,
+                                                 Completeness_Report, Source_Citation_Abbreviation,
+                                                 Source_Contribution, Process_Description and
+                                                 Source_Used_Citation_Abbreviation to have a minimum
+                                                 string length of one.
+        MMC      20080110   N/A                 Modified to validate for the edges profile. This profile
+                                                 is similar to the vector profile but has the Horizontl_
+                                                 Positional_Accuracy_Report, Horizontal_Postitional_Value,
+                                                 Horizontal_Positional_Accuraccy_Report.
+        MMC      20080616   N/A                 Xpaths modified to mirror the directory structure on node104                          
+    </xsd:documentation>
+  </xsd:annotation>
+
+
+  <xsd:complexType name="Map_Type">
+    <xsd:sequence>
+
+      <xsd:element name="Attribute_Accuracy_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>       
+
+      <xsd:element name="Logical_Consistency_Report">
+        <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Completeness_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Horizontal_Positional_Accuracy_Report" type="mtag:vstring" minOccurs="0"/>
+      <xsd:element name="Source_Information" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:group ref="citi:Citation_Information_A_Group"/>
+            <xsd:element name="Source_Scale_Denominator" 
+                         type="xsd:positiveInteger" minOccurs="0"/>
+            <xsd:element name="Type_of_Source_Media" 
+                         type="dqi:Type_of_Source_Media_Type"/>
+            <xsd:group ref="mtag:Time_Period_Information_Group"/>
+            <xsd:element name="Source_Currentness_Reference" 
+                         type="dqi:Source_Currentness_Reference_Type"/>
+
+            <xsd:element name="Source_Citation_Abbreviation">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="Source_Contribution">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Process_Step" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+
+            <xsd:element name="Process_Description">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="Source_Used_Citation_Abbreviation" minOccurs="0" maxOccurs="unbounded">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="Process_Date" type="dqi:Process_Date_Type"/>
+            <xsd:element name="Source_Produced_Citation_Abbreviation"
+                         type="mtag:vstring" 
+                         minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Vector_Type">
+    <xsd:sequence>
+
+      <xsd:element name="Attribute_Accuracy_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element> 
+
+      <xsd:element name="Logical_Consistency_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Completeness_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Horizontal_Positional_Accuracy_Report" type="mtag:vstring" minOccurs="0"/>
+      <xsd:element name="Quantitative_Horizontal_Positional_Accuracy_Assessment" minOccurs="0"
+                   maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Horizontal_Positional_Accuracy_Value" 
+                         type="mtag:vstring"/> <!-- float? -->
+            <xsd:element name="Horizontal_Positional_Accuracy_Explanation"
+                         type="mtag:vstring"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Source_Information" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:group ref="citi:Citation_Information_A_Group"/>
+            <xsd:element name="Type_of_Source_Media"
+                         type="dqi:Type_of_Source_Media_Type"/>
+            <xsd:group ref="mtag:Time_Period_Information_Group"/>
+            <xsd:element name="Source_Currentness_Reference"
+                         type="dqi:Source_Currentness_Reference_Type"/>
+
+            <xsd:element name="Source_Citation_Abbreviation">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="Source_Contribution">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Process_Step" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+
+            <xsd:element name="Process_Description">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+       
+            <xsd:element name="Source_Used_Citation_Abbreviation" maxOccurs="unbounded">
+              <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+
+            <xsd:element name="Process_Date" type="dqi:Process_Date_Type"/>
+            <xsd:element name="Source_Produced_Citation_Abbreviation" type="mtag:vstring"
+                         minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Tabular_Type">
+    <xsd:sequence>
+
+      <xsd:element name="Attribute_Accuracy_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Logical_Consistency_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Completeness_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Source_Information" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:group ref="citi:Citation_Information_A_Group"/>
+            <xsd:element name="Type_of_Source_Media"
+                         type="dqi:Type_of_Source_Media_Type"/>
+            <xsd:group ref="mtag:Time_Period_Information_Group"/>
+            <xsd:element name="Source_Currentness_Reference"
+                         type="dqi:Source_Currentness_Reference_Type"/>
+
+            <xsd:element name="Source_Citation_Abbreviation">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="Source_Contribution">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Process_Step" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+
+            <xsd:element name="Process_Description">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>        
+
+            <xsd:element name="Source_Used_Citation_Abbreviation" minOccurs="0" maxOccurs="unbounded">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+
+            <xsd:element name="Process_Date" type="dqi:Process_Date_Type"/>
+            <xsd:element name="Source_Produced_Citation_Abbreviation" type="mtag:vstring"
+                         minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Repository_Type">
+    <xsd:sequence>
+      <xsd:element name="Attribute_Accuracy_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Logical_Consistency_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Completeness_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Horizontal_Positional_Accuracy_Report" type="mtag:vstring"
+                   minOccurs="0"/>
+      <xsd:element name="Quantitative_Horizontal_Positional_Accuracy_Assessment"
+                   minOccurs="0" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Horizontal_Positional_Accuracy_Value"
+                         type="mtag:vstring"/> <!-- float? -->
+            <xsd:element name="Horizontal_Positional_Accuracy_Explanation"
+                         type="mtag:vstring"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Source_Information" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:group ref="citi:Citation_Information_A_Group"/>
+            <xsd:element name="Source_Scale_Denominator"
+                         type="xsd:positiveInteger" minOccurs="0"/>
+            <xsd:element name="Type_of_Source_Media"
+                         type="dqi:Type_of_Source_Media_Type"/>
+            <xsd:group ref="mtag:Time_Period_Information_Group"/>
+            <xsd:element name="Source_Currentness_Reference"
+                         type="dqi:Source_Currentness_Reference_Type"/>
+
+            <xsd:element name="Source_Citation_Abbreviation"  minOccurs="0">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="Source_Contribution">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Process_Step" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+
+            <xsd:element name="Process_Description">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="Source_Used_Citation_Abbreviation" maxOccurs="unbounded">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+
+            <xsd:element name="Process_Date" type="dqi:Process_Date_Type"/>
+            <xsd:element name="Source_Produced_Citation_Abbreviation" type="mtag:vstring"
+                         minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+<!-- edges Type -->
+
+<xsd:complexType name="Edges_Type">
+    <xsd:sequence>
+
+      <xsd:element name="Attribute_Accuracy_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Logical_Consistency_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Completeness_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Horizontal_Positional_Accuracy_Report" type="mtag:vstring" minOccurs="1"/>
+      <xsd:element name="Quantitative_Horizontal_Positional_Accuracy_Assessment" minOccurs="0"
+                   maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Horizontal_Positional_Accuracy_Value"
+                         type="mtag:vstring"/> <!-- float? -->
+            <xsd:element name="Horizontal_Positional_Accuracy_Explanation"
+                         type="mtag:vstring"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Source_Information" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:group ref="citi:Citation_Information_A_Group"/>
+            <xsd:element name="Type_of_Source_Media"
+                         type="dqi:Type_of_Source_Media_Type"/>
+            <xsd:group ref="mtag:Time_Period_Information_Group"/>
+            <xsd:element name="Source_Currentness_Reference"
+                         type="dqi:Source_Currentness_Reference_Type"/>
+
+            <xsd:element name="Source_Citation_Abbreviation">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="Source_Contribution">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Process_Step" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+
+            <xsd:element name="Process_Description">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="Source_Used_Citation_Abbreviation" maxOccurs="unbounded">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+
+            <xsd:element name="Process_Date" type="dqi:Process_Date_Type"/>
+            <xsd:element name="Source_Produced_Citation_Abbreviation" type="mtag:vstring"
+                         minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+<xsd:complexType name="EdgesEnhanced_Type">
+    <xsd:sequence>
+
+      <xsd:element name="Attribute_Accuracy_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Logical_Consistency_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Completeness_Report">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Horizontal_Positional_Accuracy_Report" type="mtag:vstring" minOccurs="1"/>
+      <xsd:element name="Quantitative_Horizontal_Positional_Accuracy_Assessment" minOccurs="1"
+                   maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Horizontal_Positional_Accuracy_Value"
+                         type="mtag:vstring"/> <!-- float? -->
+            <xsd:element name="Horizontal_Positional_Accuracy_Explanation"
+                         type="mtag:vstring"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Source_Information" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:group ref="citi:Citation_Information_A_Group"/>
+            <xsd:element name="Type_of_Source_Media"
+                         type="dqi:Type_of_Source_Media_Type"/>
+            <xsd:group ref="mtag:Time_Period_Information_Group"/>
+            <xsd:element name="Source_Currentness_Reference"
+                         type="dqi:Source_Currentness_Reference_Type"/>
+
+            <xsd:element name="Source_Citation_Abbreviation">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="Source_Contribution">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Process_Step" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+
+            <xsd:element name="Process_Description">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+            <xsd:element name="Source_Used_Citation_Abbreviation" maxOccurs="unbounded">
+             <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+           </xsd:element>
+
+
+            <xsd:element name="Process_Date" type="dqi:Process_Date_Type"/>
+            <xsd:element name="Source_Produced_Citation_Abbreviation" type="mtag:vstring"
+                         minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+
+
+
+
+<!-- Simple Types -->
+
+  <xsd:simpleType name="Type_of_Source_Media_Type">
+ 		<xsd:union>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+			  	<xsd:enumeration value="paper"/>
+			  	<xsd:enumeration value="stable-base material"/>
+			  	<xsd:enumeration value="microfiche"/>
+			  	<xsd:enumeration value="microfilm"/>
+			  	<xsd:enumeration value="audiocassette"/>
+			  	<xsd:enumeration value="chart"/>
+			  	<xsd:enumeration value="filmstrip"/>
+			  	<xsd:enumeration value="transparency"/>
+			  	<xsd:enumeration value="videocassette"/>
+			  	<xsd:enumeration value="videodisc"/>
+			  	<xsd:enumeration value="videotape"/>
+			  	<xsd:enumeration value="physical model"/>
+			  	<xsd:enumeration value="computer program"/>
+			  	<xsd:enumeration value="disc"/>
+			  	<xsd:enumeration value="cartridge tape"/>
+			  	<xsd:enumeration value="magnetic tape"/>
+			  	<xsd:enumeration value="online"/>
+			  	<xsd:enumeration value="CD-ROM"/>
+			  	<xsd:enumeration value="electronic bulletin board"/>
+			  	<xsd:enumeration value="electronic mail system"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType>
+				<xsd:restriction base="mtag:vstring"/>
+			</xsd:simpleType>
+		</xsd:union>
+	</xsd:simpleType>
+
+  <xsd:simpleType name="Source_Currentness_Reference_Type">
+ 		<xsd:union>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+			  	<xsd:enumeration value="ground condition"/>
+			  	<xsd:enumeration value="publication date"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType>
+				<xsd:restriction base="mtag:vstring"/>
+			</xsd:simpleType>
+		</xsd:union>
+	</xsd:simpleType>
+
+  <xsd:simpleType name="Process_Date_Type">
+    <xsd:restriction base="xsd:string">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+        
+ 	<!-- 	<xsd:union>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+			  	<xsd:enumeration value="Unknown"/>
+			  	<xsd:enumeration value="Not complete"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType>
+				<xsd:restriction base="mtag:vstring"/>
+			</xsd:simpleType>
+		</xsd:union>
+	</xsd:simpleType> -->
+
+</xsd:schema>

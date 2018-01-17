@@ -1,0 +1,546 @@
+<?xml version="1.0"?>
+<xsd:schema targetNamespace="/mt/apps/gpms/xsd/IdentificationInformation"
+            xmlns:ii="/mt/apps/gpms/xsd/IdentificationInformation"                 
+            xmlns:citi="/mt/apps/gpms/xsd/CitationInformation"
+            xmlns:coni="/mt/apps/gpms/xsd/ContactInformation"
+            xmlns:mtag="/mt/apps/gpms/xsd/MiscTypesAndGroups"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xdb="http://xmlns.oracle.com/xdb">
+
+  <xsd:import namespace="/mt/apps/gpms/xsd/CitationInformation" 
+              schemaLocation="/mt/apps/gpms/xsd/CitationInformation.xsd"/>
+  <xsd:import namespace="/mt/apps/gpms/xsd/ContactInformation" 
+              schemaLocation="/mt/apps/gpms/xsd/ContactInformation.xsd"/>
+  <xsd:import namespace="/mt/apps/gpms/xsd/MiscTypesAndGroups" 
+              schemaLocation="/mt/apps/gpms/xsd/MiscTypesAndGroups.xsd"/>
+
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+      Name:  IdentificationInformation.xsd
+      Authors:  James W. Allor, Matthew J. McCready
+      Date:  20050314
+      Description:  Validating XML Schema for the Identification 
+                    Information section. Please reference the Census 
+                    Bureau Geospatial Product Metadata Standard (GPMS),
+                    Table 1.
+      Modification History:
+          Initial   Date      Change Request ID  Description
+          JWA      20050314    N/A                Initial version
+          JWA      20051109    N/A                Updated to reflect current GPMS Table 1.
+          JWA      20051201    N/A                 Added types and attributes for Oracle XML DB.
+          JWA      20051215    N/A                 Changed xsd:string to mtag:vstring
+                                                   to validate elements have a value.
+          MMC      20071204    N/A                Modified so that all the Keywords have to have
+                                                   a minimium string length of 1
+          MMC      20071204    N/A                Modified so that the Abstract and Purpose have to have
+                                                   a minimium string length of 1
+          MMC      20071205    N/A                Modified West_Bounding_Coordinate so that the minimum 
+                                                   value is -180
+          MMC      20071206    N/A                Modified Title_13_Type to accept "Yes" and "No"
+          MMC      20071210    N/A                Modified Title_13_Type to have a minimum string
+                                                   length of 2 and a maximum string length of 3
+          MMC      20071211    N/A                Modified so that Edition, Geospatial_Data_Presnetation_Form
+                                                   Online_Linkage, Currentness_Reference and Progress all
+                                                   have to have a minimum tring length of 1 character.
+          MMC      20080208    N/A                Modified to accept variable length Title_13 elements. 
+          MMC      20080528    N/A                Eliminated the West_Bounding_Coordinate_Type because it
+                                                   was causing an error; 2 Min+max Exclusives: 1 in the 
+                                                   West_Bounding_Coordinate_Type and 1 in the 
+                                                   mtag:Longitude_Type.Also changed the type in the 
+                                                   West_Bounding_Coordinate element from 
+                                                   West_Bounding_Coordinate_Type to the mtag:Longitude_Type.   
+          MMC      20080616    N/A                Xpaths modified to mirror the directory structure on node104.
+          MMC      20101221    N/A                Modified to verify the ISO Keywords. This was done by creating
+                                                   a new complexType called Theme_Keywords_Type and deleting "Keywords_Type" 
+                                                   complex, which included the Theme and Place keywords. The "Theme_Keywords_Type" complex ensures
+                                                   that all the keyword types(ISO, regular and place) exist in any order.
+                                                   This is achieved through calling three other complex types: ISO_Theme_Keyword_Type,
+                                                   which ensures that there are the correct ISO keywords, Regular_Theme_Keyword_Type
+                                                   , which ensures that there are Theme keywordsand Place_Theme_Keyword_Type, which ensures
+                                                   that there are Place keywords. Finally, the complexTypes representing each profile were changed.        
+         MMC       20101221    N/A               Changed the maxOccurs attribute on the "Theme_Keyword" to 19. This was done to represent the 
+                                                  number of ISO 19115 keywords.  
+         MMC       20110302    N/A               Modifed to verify more than 1 set of Place Keywords can exist. Now, 3 different sets Place_Keywords are
+                                                  checked for:Place, Place_INCITS and Place_INCITSB.
+</xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:complexType name="Planned_Type">
+    <xsd:sequence>
+      <xsd:element name="Citation" type="citi:Citation_Information_A_Type"/>
+      <xsd:element name="Description" type="ii:Description_Type"/>
+      <xsd:element name="Time_Period_of_Content" type="ii:Time_Period_of_Content_Type"/>
+      <xsd:element name="Status" type="ii:Status_Type"/>
+      <xsd:element name="Spatial_Domain" type="ii:Spatial_Domain_With_G-Polygon_Type"/>
+      <xsd:element name="Keywords" type="ii:Theme_Keywords_Type"/>
+      <xsd:element name="Access_Constraints" type="ii:Constraints_Type"/>
+      <xsd:element name="Use_Constraints" type="ii:Constraints_Type"/>
+      <xsd:element name="Point_of_Contact" type="coni:All_Mandatory_Type"/>
+      <xsd:element name="Cross_Reference" type="citi:Citation_Information_B_Type" 
+                   maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Legacy_Atlas_Type">
+    <xsd:sequence>
+      <xsd:element name="Citation" type="citi:Citation_Information_C_Type"/>
+      <xsd:element name="Description" type="ii:Description_With_AFF_Type"/>
+      <xsd:element name="Time_Period_of_Content" type="ii:Time_Period_of_Content_Type"/>
+      <xsd:element name="Status" type="ii:Status_Type"/>
+      <xsd:element name="Spatial_Domain" type="ii:Spatial_Domain_Type"/>
+      <xsd:element name="Keywords" type="ii:Theme_Keywords_Type"/>
+      <xsd:element name="Access_Constraints" type="ii:Constraints_Type"/>
+      <xsd:element name="Use_Constraints" type="ii:Constraints_Type"/>
+      <xsd:element name="Title_13_Restrictions" type="ii:Title_13_Type"/>
+      <xsd:element name="Point_of_Contact" type="coni:All_Mandatory_Type"/>
+      <xsd:element name="Data_Set_Character_Set" type="mtag:Character_Set_Type"/>
+      <xsd:element name="Data_Set_Language" type="mtag:Language_Type"/>
+      <xsd:element name="Cross_Reference" type="citi:Citation_Information_B_Type" 
+                   minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Map_Type">
+    <xsd:sequence>
+      <xsd:element name="Citation" type="citi:Citation_Information_C_Type"/>
+      <xsd:element name="Description" type="ii:Description_With_AFF_Type"/>
+      <xsd:element name="Time_Period_of_Content" type="ii:Time_Period_of_Content_Type"/>
+      <xsd:element name="Status" type="ii:Status_Type"/>
+      <xsd:element name="Spatial_Domain" type="ii:Spatial_Domain_With_G-Polygon_Type"/>
+      <xsd:element name="Keywords" type="ii:Theme_Keywords_Type"/>   
+      <xsd:element name="Access_Constraints" type="ii:Constraints_Type"/>
+      <xsd:element name="Use_Constraints" type="ii:Constraints_Type"/>
+     
+      <xsd:element name="Title_13_Restrictions" type="ii:Title_13_Type"/> 
+
+
+ <xsd:element name="Point_of_Contact" type="coni:All_Mandatory_Type"/>
+      <xsd:element name="Browse_Graphic" type="ii:Browse_Graphic_Type" 
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Data_Set_Character_Set" type="mtag:Character_Set_Type"/>
+      <xsd:element name="Data_Set_Language" type="mtag:Language_Type"/>
+      <xsd:element name="Native_Data_Set_Environment" type="mtag:vstring" minOccurs="0"/>
+      <xsd:element name="Cross_Reference" type="citi:Citation_Information_B_Type" 
+                   minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+<!-- also used by the edges type -->
+  <xsd:complexType name="Vector_Type">
+    <xsd:complexContent>
+      <xsd:extension base="ii:Map_Type"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="Tabular_Type">
+    <xsd:sequence>
+      <xsd:element name="Citation" type="citi:Citation_Information_C_Type"/>
+      <xsd:element name="Description" type="ii:Description_With_AFF_Type"/>
+      <xsd:element name="Time_Period_of_Content" type="ii:Time_Period_of_Content_Type"/>
+      <xsd:element name="Status" type="ii:Status_Type"/>
+      <xsd:element name="Spatial_Domain" type="ii:Spatial_Domain_Type"/>
+      <xsd:element name="Keywords" type="ii:Theme_Keywords_Type"/>
+      <xsd:element name="Access_Constraints" type="ii:Constraints_Type"/>
+      <xsd:element name="Use_Constraints" type="ii:Constraints_Type"/>
+      <xsd:element name="Title_13_Restrictions" type="ii:Title_13_Type"/>
+
+      <xsd:element name="Point_of_Contact" type="coni:All_Mandatory_Type"/>
+      <xsd:element name="Data_Set_Character_Set" type="mtag:Character_Set_Type"/>
+      <xsd:element name="Data_Set_Language" type="mtag:Language_Type"/>
+      <xsd:element name="Native_Data_Set_Environment" type="mtag:vstring" minOccurs="0"/>
+      <xsd:element name="Cross_Reference" type="citi:Citation_Information_B_Type" 
+                   minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Repository_Type">
+    <xsd:sequence>
+      <xsd:element name="Citation" type="citi:Citation_Information_D_Type"/>
+      <xsd:element name="Description" type="ii:Description_Repository_Type"/>
+      <xsd:element name="Time_Period_of_Content" type="ii:Time_Period_of_Content_Type"/>
+      <xsd:element name="Status" type="ii:Status_Type"/>
+      <xsd:element name="Spatial_Domain" type="ii:Spatial_Domain_With_G-Polygon_Type"/>
+       <xsd:element name="Keywords" type="ii:Theme_Keywords_Type"/>
+      <xsd:element name="Access_Constraints" type="ii:Constraints_Type"/>
+      <xsd:element name="Use_Constraints" type="ii:Constraints_Type"/>
+      <xsd:element name="Title_13_Restrictions" type="ii:Title_13_Type" minOccurs="0"/>
+      <xsd:element name="Point_of_Contact" type="coni:All_Mandatory_Type"/>
+      <xsd:element name="Browse_Graphic" type="ii:Browse_Graphic_Type" 
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Data_Set_Character_Set" type="mtag:Character_Set_Type" 
+                   minOccurs="0"/>
+      <xsd:element name="Data_Set_Language" type="mtag:Language_Type" minOccurs="0"/>
+      <xsd:element name="Native_Data_Set_Environment" type="mtag:vstring" minOccurs="0"/>
+      <xsd:element name="Cross_Reference" type="citi:Citation_Information_B_Type" 
+                   minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+ <!-- Major Section Complex Type Definitions -->
+
+  <xsd:complexType name="Description_Type">
+    <xsd:sequence>
+ 
+      <xsd:element name="Abstract">
+        <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+           <xsd:minLength value="1"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+     
+      <xsd:element name="Purpose">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+           <xsd:minLength value="1"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Supplemental_Information" type="mtag:vstring" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Description_With_AFF_Type">
+    <xsd:sequence>
+      <xsd:element name="Abstract">
+        <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+           <xsd:minLength value="1"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Purpose">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+           <xsd:minLength value="1"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Subject_Entity">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+           <xsd:minLength value="1"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+
+      <xsd:element name="Survey_Instance_Name" type="mtag:vstring" minOccurs="0"/>
+      <xsd:element name="Survey_Name" type="mtag:vstring" minOccurs="0"/>
+      <xsd:element name="Supplemental_Information" type="mtag:vstring" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Description_Repository_Type">
+    <xsd:sequence>
+
+      <xsd:element name="Abstract">
+        <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+           <xsd:minLength value="1"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>      
+
+      <xsd:element name="Purpose">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+           <xsd:minLength value="1"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Subject_Entity" type="mtag:vstring" minOccurs="0"/>
+      <xsd:element name="Survey_Instance_Names" type="mtag:vstring" minOccurs="0"/>
+      <xsd:element name="Survey_Name" type="mtag:vstring" minOccurs="0"/>
+      <xsd:element name="Supplemental_Information" type="mtag:vstring" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Time_Period_of_Content_Type">
+    <xsd:sequence>
+      <xsd:group ref="mtag:Time_Period_Information_Group"/>
+      <xsd:element name="Currentness_Reference" type="ii:Currentness_Reference_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Status_Type">
+    <xsd:sequence>
+      <xsd:element name="Progress" type="ii:Progress_Type"/>
+      <xsd:element name="Maintenance_and_Update_Frequency" 
+                   type="ii:Maintenance_and_Update_Frequency_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Spatial_Domain_Type">
+    <xsd:sequence>
+      <xsd:element name="West_Bounding_Coordinate" type="mtag:Longitude_Type"/>
+      <xsd:element name="East_Bounding_Coordinate" type="mtag:Longitude_Type"/>
+      <xsd:element name="North_Bounding_Coordinate" type="mtag:Latitude_Type"/>
+      <xsd:element name="South_Bounding_Coordinate" type="mtag:Latitude_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Spatial_Domain_With_G-Polygon_Type">
+    <xsd:sequence>
+      <xsd:element name="West_Bounding_Coordinate" type="mtag:Longitude_Type"/>
+      <xsd:element name="East_Bounding_Coordinate" type="mtag:Longitude_Type"/>
+      <xsd:element name="North_Bounding_Coordinate" type="mtag:Latitude_Type"/>
+      <xsd:element name="South_Bounding_Coordinate" type="mtag:Latitude_Type"/>
+      <xsd:element name="Data_Set_G-Polygon" minOccurs="0" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Outer_G-Ring" type="mtag:vstring"/>
+            <xsd:element name="Exclusion_G-Ring" type="mtag:vstring" 
+                         minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+<!-- start here -->
+<!-- end of new -->
+<!-- End here -->
+
+<xsd:complexType name="Place_Keyword_Type">
+<xsd:sequence>
+            <xsd:element name="Place_Keyword_Thesaurus">
+
+                   <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                 <xsd:minLength value="1"/>
+                </xsd:restriction>
+               </xsd:simpleType>
+
+            </xsd:element>
+
+
+            <xsd:element name="Place_Keyword" 
+                         maxOccurs="unbounded">
+
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                 <xsd:minLength value="1"/>
+                </xsd:restriction>
+               </xsd:simpleType>
+
+            </xsd:element>
+
+
+    </xsd:sequence>
+ </xsd:complexType>
+
+
+<xsd:complexType name="Regular_Theme_Keyword_Type">
+<xsd:sequence>
+
+            <xsd:element name="Theme_Keyword_Thesaurus">
+           </xsd:element>
+
+            <xsd:element name="Theme_Keyword" maxOccurs="unbounded">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                 <xsd:minLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+
+</xsd:sequence>
+</xsd:complexType>
+
+<!-- ISO Keywords -->
+<xsd:complexType name="ISO_Theme_Keyword_Type" mixed="true">
+<xsd:sequence>
+
+            <xsd:element name="Theme_Keyword_Thesaurus_ISO">
+                       <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <xsd:minLength value="1"/> 
+                 <xsd:enumeration value="ISO 19115 Topic Categories"/>
+                </xsd:restriction>
+               </xsd:simpleType>
+            </xsd:element>
+
+
+            <xsd:element name="Theme_Keyword" maxOccurs="19">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <xsd:minLength value="5"/> 
+                 <xsd:enumeration value="Farming"/>
+                 <xsd:enumeration value="Biota"/>
+                 <xsd:enumeration value="Boundaries"/>
+                 <xsd:enumeration value="Atmosphere"/>
+                 <xsd:enumeration value="Economy"/>
+                 <xsd:enumeration value="Elevation"/>
+                 <xsd:enumeration value="Environment"/>
+                 <xsd:enumeration value="GeoscientificInformation"/>
+                 <xsd:enumeration value="Health"/>
+                 <xsd:enumeration value="ImageryBaseMapsEarthCover"/>
+                 <xsd:enumeration value="IntelligenceMilitary"/>  
+                 <xsd:enumeration value="InlandWaters"/>
+                 <xsd:enumeration value="Location"/>
+                 <xsd:enumeration value="Oceans"/>
+                 <xsd:enumeration value="Planning/Cadastre"/>
+                 <xsd:enumeration value="Society"/>
+                 <xsd:enumeration value="Structure"/>
+                 <xsd:enumeration value="Transportation"/>
+                 <xsd:enumeration value="Utilities/Communications"/> 
+                </xsd:restriction>
+              </xsd:simpleType>
+             </xsd:element>
+       
+</xsd:sequence>
+</xsd:complexType>
+
+<xsd:complexType name="Theme_Keywords_Type" mixed="true">
+
+<xsd:all>
+<xsd:element name="Theme_ISO" type="ii:ISO_Theme_Keyword_Type" maxOccurs="1" minOccurs="1"/>
+<xsd:element name="Theme" type="ii:Regular_Theme_Keyword_Type"/>
+<xsd:element name="PLaceTotal" type="ii:Place_Keyword_Type" minOccurs="1" maxOccurs="1"/>
+<xsd:element name="Place" type="ii:Place_Keyword_Type" minOccurs="0"  maxOccurs="unbounded"/>
+<xsd:element name="Place_INCITS" type="ii:Place_Keyword_Type" minOccurs="0"  maxOccurs="unbounded"/> 
+<xsd:element name="Place_INCITSB" type="ii:Place_Keyword_Type" minOccurs="0"  maxOccurs="unbounded"/>
+<xsd:element name="Place_INCITSC" type="ii:Place_Keyword_Type" minOccurs="0"  maxOccurs="unbounded"/><!-- INCITS 446-2008 -->
+</xsd:all>
+
+<!-- <xsd:element name="PLaceTotal" type="ii:Place_Keyword_Type" minOccurs="1" maxOccurs="1"/> -->
+
+</xsd:complexType>
+
+<!-- <xsd:complexType name="Repository_Type">
+    <xsd:sequence>
+      <xsd:element name="Citation" type="citi:Citation_Information_D_Type"/>
+      <xsd:element name="Description" type="ii:Description_Repository_Type"/>
+ </xsd:sequence>
+  </xsd:complexType> -->
+
+
+  <xsd:complexType name="Browse_Graphic_Type">
+    <xsd:sequence>
+      <xsd:element name="Browse_Graphic_File_Name" type="mtag:vstring"/>
+      <xsd:element name="Browse_Graphic_File_Description" type="mtag:vstring"/>
+      <xsd:element name="Browse_Graphic_File_Type" 
+                   type="ii:Browse_Graphic_File_Type_Type"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+<!-- Simple Type Definitions -->
+
+  <xsd:simpleType name="Currentness_Reference_Type">
+    <xsd:union>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+           <xsd:enumeration value="ground condition"/>
+          <xsd:enumeration value="publication date"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+         </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:union>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="Progress_Type">
+    <xsd:union>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="Complete"/>
+          <xsd:enumeration value="In work"/>
+          <xsd:enumeration value="Planned"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:union>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="Maintenance_and_Update_Frequency_Type">
+    <xsd:union>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="Continually"/>
+          <xsd:enumeration value="Daily"/>
+          <xsd:enumeration value="Weekly"/>
+          <xsd:enumeration value="Monthly"/>
+          <xsd:enumeration value="Annually"/>
+          <xsd:enumeration value="Unknown"/>
+          <xsd:enumeration value="As needed"/>
+          <xsd:enumeration value="Irregular"/>
+          <xsd:enumeration value="None planned"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="3"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:union>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="Title_13_Type">
+    <xsd:union>
+      
+        <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                 <xsd:minLength value="1"/>
+                </xsd:restriction>
+          </xsd:simpleType>
+
+    </xsd:union>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="Place_Keyword_Thesaurus_Type">
+    <xsd:union>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="None"/>
+          <xsd:enumeration value="Geographic Names Information System"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring"/>
+      </xsd:simpleType>
+    </xsd:union>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="Constraints_Type">
+                <xsd:restriction base="xsd:string">
+                 <xsd:minLength value="1"/>
+                </xsd:restriction>
+  </xsd:simpleType>
+
+
+  <xsd:simpleType name="Browse_Graphic_File_Type_Type">
+    <xsd:union>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="CGM"/>
+          <xsd:enumeration value="EPS"/>
+          <xsd:enumeration value="EMF"/>
+          <xsd:enumeration value="GIF"/>
+          <xsd:enumeration value="JPEG"/>
+          <xsd:enumeration value="PBM"/>
+          <xsd:enumeration value="PS"/>
+          <xsd:enumeration value="TIFF"/>
+          <xsd:enumeration value="WMF"/>
+          <xsd:enumeration value="XWD"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring"/>
+      </xsd:simpleType>
+    </xsd:union>
+  </xsd:simpleType>
+ 
+</xsd:schema>

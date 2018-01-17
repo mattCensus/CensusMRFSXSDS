@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<xsd:schema targetNamespace="../xsd/SpatialDataOrganizationInformation"
+            xmlns:sdoi="../xsd/SpatialDataOrganizationInformation"         
+            xmlns:mtag="../xsd/MiscTypesAndGroups"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xdb="http://xmlns.oracle.com/xdb">
+
+  <xsd:import namespace="../xsd/MiscTypesAndGroups" 
+              schemaLocation="../xsd/MiscTypesAndGroups.xsd"/>
+ 
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+      Name:  SpatialDataOrganizationInformation.xsd
+      Authors:  James W. Allor, Matthew J. McCready
+      Date:  20050311
+      Description:  Validating XML Schema for the Spatial Data Organization 
+                    Information section. Please reference the Census 
+                    Bureau Geospatial Product Metadata Standard (GPMS),
+                    Table 1. 
+      Modification History:
+        Initial   Date     Change Request ID   Description
+         JWA     20050311   N/A                 Initial Version
+         JWA     20051110   N/A                 Updated to reflect current GPMS Table 1.
+         JWA     20051201   N/A                 Added types and attributes
+                                                 for Oracle XML DB.
+         JWA     20051215   N/A                 Changed xsd:string to mtag:vstring
+                                                 to validate elements have a value.
+         MMC     20071205   N/A                 Modified Indirect_Spatial_Reference to
+                                                 have a minimum string length of 1.
+         MMC     20080617   N/A                 Xpaths changed to reflect the directory structure
+                                                 on node104.
+         MMC     20110328   N/A                 The minOccurs="0" attribute was deleted from the "Point_and_Vector_Object_Count" elemrnt
+                                                 This element is now mandatory and confirms to the GPMS.    
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:complexType name="Vector_Type">
+    <xsd:sequence>
+
+      <xsd:element name="Indirect_Spatial_Reference">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+           <xsd:minLength value="1"/>
+          </xsd:restriction>
+         </xsd:simpleType>
+       </xsd:element>
+
+      <xsd:element name="Direct_Spatial_Reference_Method" 
+                   type="sdoi:Direct_Spatial_Reference_Method_Type"/>
+      <xsd:element name="SDTS_Terms_Description" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="SDTS_Point_and_Vector_Object_Type"
+                         type="sdoi:SDTS_Point_and_Vector_Object_Type_Type"/>
+            <xsd:element name="Point_and_Vector_Object_Count"
+                         type="xsd:positiveInteger"
+                         />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Repository_Type">
+    <xsd:complexContent>
+      <xsd:extension base="sdoi:Vector_Type"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:simpleType name="Direct_Spatial_Reference_Method_Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Point"/>
+      <xsd:enumeration value="Vector"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="SDTS_Point_and_Vector_Object_Type_Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Point"/>
+      <xsd:enumeration value="Entity point"/>
+      <xsd:enumeration value="Label point"/>
+      <xsd:enumeration value="Area point"/>
+      <xsd:enumeration value="Node, planar graph"/>
+      <xsd:enumeration value="Node, network"/>
+      <xsd:enumeration value="String"/>
+      <xsd:enumeration value="Link"/>
+      <xsd:enumeration value="Complete chain"/>
+      <xsd:enumeration value="Area chain"/>
+      <xsd:enumeration value="Network chain, planar graph"/>
+      <xsd:enumeration value="Network chain, nonplanar graph"/>
+      <xsd:enumeration value="Circular arc, three point center"/>
+      <xsd:enumeration value="Elliptical arc"/>
+      <xsd:enumeration value="Uniform B-spline"/>
+      <xsd:enumeration value="Piecewise Bezier"/>
+      <xsd:enumeration value="Ring with mixed composition"/>
+      <xsd:enumeration value="Ring composed of strings"/>
+      <xsd:enumeration value="Ring composed of chains"/>
+      <xsd:enumeration value="Ring composed of arcs"/>
+      <xsd:enumeration value="G-polygon"/>
+      <xsd:enumeration value="GT-polygon composed of rings"/>
+      <xsd:enumeration value="GT-polygon composed of chains"/>
+      <xsd:enumeration value="Universe polygon composed of rings"/>
+      <xsd:enumeration value="Universe polygon composed of chains"/>
+      <xsd:enumeration value="Void polygon composed of rings"/>
+      <xsd:enumeration value="Void polygon composed of chains"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+</xsd:schema>

@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="../xsd/EntityAndAttributeInformation"
+ xmlns:eaai="../xsd/EntityAndAttributeInformation"
+ xmlns:mtag="../xsd/MiscTypesAndGroups" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:xdb="http://xmlns.oracle.com/xdb">
+
+ <xsd:import namespace="../xsd/MiscTypesAndGroups"
+  schemaLocation="../xsd/MiscTypesAndGroups.xsd"/>
+
+ <xsd:annotation>
+  <xsd:documentation xml:lang="en"> Name: EntityAndAttributeInformation.xsd Authors: James W. Allor,
+   Matthew J. McCready Date: 20050311 Description: Validating XML Schema for the Entity and
+   Attribute Information section. Please reference the Census Bureau Geospatial Product Metadata
+   Standard (GPMS), Table 1. Modification History: Initial Date Change Request ID Description JWA
+   20050311 N/A Initial Version JWA 20051109 N/A Updated to reflect current GPMS Table 1. JWA
+   20051201 N/A Added types and attributes for Oracle XML DB. JWA 20051215 N/A Changed xsd:string to
+   mtag:vstring to validate elements have a value. MMC 20071206 N/A Modified Entity_Type_Label,
+   Entity_Type_Definition, Entity_Type_Definition_Source Range_Domain_Minimum, Range_Domain_Maximum
+   Attribute_Units_of_Measure, Codeset_Name Codeset_Source, Unrepresentable_Domain
+   Entity_and_Attribute_Overview and Entity_and_Attribute_Detail_Citation so that they have to have
+   a length of at least 1 character. MMC 20071206 Modified Attribute_Domain_Values so that they have
+   to occur MMC 20071211 Modified so that Entity_and_Attribute_Overview and
+   Entity_and_Attribute_Detail_Citation have to have a minimum string length of 1 character. MMC
+   20080616 Xpaths modified to mirror the directory structure on node104. </xsd:documentation>
+ </xsd:annotation>
+
+
+ <xsd:complexType name="Map_Type">
+  <xsd:choice minOccurs="1" maxOccurs="unbounded">
+   <xsd:element name="Detailed_Description" maxOccurs="unbounded">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element name="Entity_Type" type="eaai:Entity_Type_Type"/>
+      <xsd:element name="Attribute" minOccurs="0" maxOccurs="unbounded">
+       <xsd:complexType>
+        <xsd:sequence maxOccurs="1">
+         <xsd:group ref="eaai:Attribute_Group"/>
+         <xsd:group ref="eaai:Attribute_Domain_Values_A_Group" maxOccurs="unbounded"/>
+        </xsd:sequence>
+       </xsd:complexType>
+      </xsd:element>
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="Overview_Description" type="eaai:Overview_Description_Type" minOccurs="0"
+    maxOccurs="unbounded"/>
+  </xsd:choice>
+ </xsd:complexType>
+
+ <!-- IncomingAddress_Type -->
+
+
+ <xsd:complexType name="IncomingAddress_Type">
+  <xsd:sequence>
+   <xsd:element name="Overview_Description" type="eaai:Overview_Description_Type" minOccurs="1"
+    maxOccurs="unbounded"/>
+  </xsd:sequence>
+ </xsd:complexType>
+
+ <!-- <xsd:complexType name="Vector_Type">
+  <xsd:choice minOccurs="1" maxOccurs="unbounded">
+   <xsd:element name="Detailed_Description" maxOccurs="unbounded">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element name="Entity_Type" type="eaai:Entity_Type_Type"/> -->
+ <!--<xsd:group ref="eaai:Attribute_Group"/>
+                  <xsd:element name="Attribute_Domain_Values" maxOccurs="unbounded" type="eaai:VectorTabAttDom"/> -->
+ <!-- <xsd:group ref="eaai:Attribute_Domain_Values_B_Group" maxOccurs="unbounded"/> -->
+
+
+ <!--    </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="Overview_Description" type="eaai:Overview_Description_Type"
+    maxOccurs="unbounded"/>
+  </xsd:choice>
+ </xsd:complexType> -->
+
+
+ <xsd:complexType name="Vector_Type">
+  <xsd:sequence>
+   <xsd:element name="Detailed_Description" maxOccurs="unbounded">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element name="Entity_Type" type="eaai:Entity_Type_Type"/>
+      <xsd:element name="Attribute" maxOccurs="unbounded">
+       <xsd:complexType>
+        <xsd:sequence>
+         <xsd:element name="Attribute_Label" minOccurs="1">
+          <xsd:simpleType>
+           <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+           </xsd:restriction>
+          </xsd:simpleType>
+         </xsd:element>
+
+         <xsd:element name="Attribute_Definition" minOccurs="1">
+          <xsd:simpleType>
+           <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+           </xsd:restriction>
+          </xsd:simpleType>
+         </xsd:element>
+
+         <xsd:element name="Attribute_Definition_Source" minOccurs="1">
+          <xsd:simpleType>
+           <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+           </xsd:restriction>
+          </xsd:simpleType>
+         </xsd:element>
+
+         <xsd:element name="Attribute_Domain_Values" maxOccurs="unbounded">
+          <xsd:complexType>
+           <xsd:choice>
+            <xsd:element name="Enumerated_Domain" type="eaai:EnumeratedDomain"/>
+            <xsd:element name="Codeset_Domain" type="eaai:CodesetDomain"/>
+            <xsd:element name="Range_Domain" type="eaai:RangeDomain"/>
+            <xsd:element name="Unrepresentable_Domain" type="eaai:UnrepresentableDomain"/>
+           </xsd:choice>
+          </xsd:complexType>
+
+
+
+
+         </xsd:element>
+        </xsd:sequence>
+       </xsd:complexType>
+      </xsd:element>
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="Overview_Description" type="eaai:Overview_Description_Type" minOccurs="0"
+    maxOccurs="unbounded"/>
+  </xsd:sequence>
+ </xsd:complexType>
+
+
+
+ <xsd:complexType name="Tabular_Type">
+  <xsd:sequence>
+   <xsd:element name="Detailed_Description" minOccurs="0" maxOccurs="unbounded">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element name="Entity_Type" type="eaai:Entity_Type_Type"/>
+      <xsd:element name="Attribute" maxOccurs="unbounded">
+       <xsd:complexType>
+        <xsd:sequence maxOccurs="1">
+         <xsd:group ref="eaai:Attribute_Group"/>
+         <xsd:group ref="eaai:Attribute_Domain_Values_B_Group" maxOccurs="unbounded"/>
+        </xsd:sequence>
+       </xsd:complexType>
+      </xsd:element>
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="Overview_Description" type="eaai:Overview_Description_Type" minOccurs="0"
+    maxOccurs="unbounded"/>
+  </xsd:sequence>
+ </xsd:complexType>
+
+
+ <xsd:complexType name="Repository_Type">
+  <xsd:choice minOccurs="1" maxOccurs="unbounded">
+   <xsd:element name="Detailed_Description" maxOccurs="unbounded">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element name="Entity_Type" type="eaai:Entity_Type_Type"/>
+      <xsd:element name="Attribute" minOccurs="0" maxOccurs="unbounded">
+       <xsd:complexType>
+        <xsd:sequence maxOccurs="1">
+         <xsd:group ref="eaai:Attribute_Group"/>
+         <xsd:group ref="eaai:Attribute_Domain_Values_A_Group" maxOccurs="unbounded"/>
+        </xsd:sequence>
+       </xsd:complexType>
+      </xsd:element>
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="Overview_Description" type="eaai:Overview_Description_Type" minOccurs="0"
+    maxOccurs="unbounded"/>
+  </xsd:choice>
+ </xsd:complexType>
+
+
+ <!-- Misc. Groups and Types -->
+
+ <xsd:complexType name="Entity_Type_Type">
+  <xsd:sequence>
+
+   <xsd:element name="Entity_Type_Label" minOccurs="1">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+   <xsd:element name="Entity_Type_Definition" minOccurs="1">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+   <xsd:element name="Entity_Type_Definition_Source" minOccurs="1">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+  </xsd:sequence>
+ </xsd:complexType>
+
+ <xsd:group name="Attribute_Group">
+  <xsd:sequence>
+
+   <xsd:element name="Attribute_Label" minOccurs="1">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+   <xsd:element name="Attribute_Definition" minOccurs="1">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+   <xsd:element name="Attribute_Definition_Source" minOccurs="1">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+  </xsd:sequence>
+ </xsd:group>
+
+ <xsd:complexType name="AttributeGroup">
+  <xsd:sequence>
+
+   <xsd:element name="Attribute_Label" minOccurs="1">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+   <xsd:element name="Attribute_Definition" minOccurs="1">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+   <xsd:element name="Attribute_Definition_Source" minOccurs="1">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+  </xsd:sequence>
+
+ </xsd:complexType>
+
+ <!-- Used for the Map Profile -->
+ <xsd:group name="Attribute_Domain_Values_A_Group">
+  <xsd:choice>
+
+   <xsd:element name="Attribute_Domain_Values" minOccurs="1" maxOccurs="unbounded">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element name="Enumerated_Domain" type="eaai:EnumeratedDomain"/>
+      <xsd:element name="Range_Domain" type="eaai:RangeDomain"/>
+      <xsd:element name="Codeset_Domain" type="eaai:CodesetDomain"/>
+      <xsd:element name="Unrepresentable_Domain" type="eaai:UnrepresentableDomain"/>
+
+
+
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+
+  </xsd:choice>
+
+ </xsd:group>
+
+ <!-- Used for the Vector and Tabular Profiles
+   <xsd:element name="Attribute_Domain_Values" maxOccurs="unbounded"> -->
+ <!-- type="eaai: -->
+ <xsd:complexType name="VectorTabAttDom">
+
+
+
+  <xsd:choice>
+   <xsd:element name="Enumerated_Domain" type="eaai:EnumeratedDomain"/>
+   <xsd:element name="Range_Domain" type="eaai:RangeDomain"/>
+   <xsd:element name="Codeset_Domain" type="eaai:CodesetDomain"/>
+   <xsd:element name="Unrepresentable_Domain" type="eaai:UnrepresentableDomain"/>
+  </xsd:choice>
+
+
+
+
+
+ </xsd:complexType>
+
+ <xsd:group name="Attribute_Domain_Values_B_Group">
+  <xsd:sequence>
+
+   <xsd:element name="Attribute_Domain_Values" maxOccurs="unbounded">
+    <xsd:complexType>
+
+     <xsd:choice>
+
+      <xsd:element name="Enumerated_Domain" type="eaai:EnumeratedDomain"/>
+      <xsd:element name="Range_Domain" type="eaai:RangeDomain"/>
+      <xsd:element name="Codeset_Domain" type="eaai:CodesetDomain"/>
+      <xsd:element name="Unrepresentable_Domain" type="eaai:UnrepresentableDomain"/>
+     </xsd:choice>
+
+
+    </xsd:complexType>
+   </xsd:element>
+
+  </xsd:sequence>
+
+ </xsd:group>
+
+
+ <xsd:complexType name="Overview_Description_Type">
+  <xsd:sequence>
+
+   <xsd:element name="Entity_and_Attribute_Overview">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+   <xsd:element name="Entity_and_Attribute_Detail_Citation" maxOccurs="unbounded">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+
+  </xsd:sequence>
+ </xsd:complexType>
+
+
+
+ <xsd:simpleType name="UnrepresentableDomain">
+  <xsd:restriction base="mtag:vstring">
+   <xsd:minLength value="5"/>
+  </xsd:restriction>
+ </xsd:simpleType>
+
+
+
+ <xsd:simpleType name="unrepsimple">
+  <xsd:restriction base="xsd:string">
+   <xsd:enumeration value="data are unavailable"/>
+  </xsd:restriction>
+ </xsd:simpleType>
+
+ <xsd:complexType name="CodesetDomain">
+  <xsd:sequence>
+
+
+   <xsd:element name="Codeset_Name">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+   <xsd:element name="Codeset_Source">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+  </xsd:sequence>
+ </xsd:complexType>
+
+ <xsd:complexType name="RangeDomain">
+
+
+  <xsd:sequence>
+
+   <xsd:element name="Range_Domain_Minimum">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+
+   <xsd:element name="Range_Domain_Maximum">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+   <xsd:element name="Attribute_Units_of_Measure" minOccurs="0">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+  </xsd:sequence>
+
+ </xsd:complexType>
+
+ <xsd:complexType name="EnumeratedDomain">
+
+  <xsd:sequence>
+
+   <xsd:element name="Enumerated_Domain_Value">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+   <xsd:element name="Enumerated_Domain_Value_Definition">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+   <xsd:element name="Enumerated_Domain_Value_Definition_Source">
+    <xsd:simpleType>
+     <xsd:restriction base="mtag:vstring">
+      <xsd:minLength value="1"/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+
+
+
+
+  </xsd:sequence>
+
+ </xsd:complexType>
+
+
+</xsd:schema>

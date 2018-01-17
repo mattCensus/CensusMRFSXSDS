@@ -1,0 +1,363 @@
+<?xml version="1.0"?>
+<xsd:schema targetNamespace="../xsd/CitationInformation"
+            xmlns:citi="../xsd/CitationInformation"
+            xmlns:mtag="../xsd/MiscTypesAndGroups"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xdb="http://xmlns.oracle.com/xdb">
+
+  <xsd:import namespace="../xsd/MiscTypesAndGroups" 
+              schemaLocation="../xsd/MiscTypesAndGroups.xsd"/>
+
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+      Name:  CitationInformation.xsd
+      Author:  James W. Allor, Matthew J. McCready
+      Date:  20050314
+      Description:  Validating XML Schema for the Citation Information
+                    section. Please reference the Census Bureau Geospatial 
+                    Product Metadata Standard (GPMS), Table 1.
+      Modification History:
+          Initial   Date      Change Request ID   Description
+          JWA      20050314    N/A                 Initial Version
+          JWA      20051109    N/A                 Updated to reflect current 
+                                                    GPMS Table 1.
+          JWA      20051201    N/A                 Added types and attributes
+                                                    for Oracle XML DB.
+          JWA      20051215    N/A                 Changed xsd:string to mtag:vstring
+                                                    to validate elements have a value.
+          MMC      20071202                        Modified so that Originator, Publication_Date
+                                                    and Edition all have to have a minimum string
+                                                    length of one
+          MMC      20071210    N/A                 Modified Edition, Geospatial_Data_Presentation_                                                                  Form and Online_Linkage to have a minimum 
+                                                    string length of 1 character.
+          MMC      20080616    N/A                 Xpaths modified to mirror the directory 
+                                                    structure on Node104.
+          MMC      20100901    N/A                 Modified the "Online_Linkage" element so that it 
+                                                    will only accept a value of
+                                                   "http://www.census.gov/geo/www/tiger
+          MMC      20110121    N/A                Modified the "Other_Citation_Details" element so that if it
+                                                   exists, it must have a minimum value of 1.  
+    </xsd:documentation>
+  </xsd:annotation>
+
+
+  <!-- Used in Lineage/SourceCitation/Cition_Information in section 2 -->
+  <xsd:group name="Citation_Information_A_Group">
+    <xsd:sequence>
+      
+      <xsd:element name="Originator" maxOccurs="unbounded">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      
+
+      <xsd:element name="Publication_Date">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="4"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Title" minOccurs="1">
+        <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      
+      <xsd:element name="Alternate_Title" minOccurs="0" maxOccurs="1">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+       
+      <xsd:element name="Other_Citation_Details" type="mtag:vstring" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:group>
+
+
+  <!-- Used for the Planned Profile -->	
+  <xsd:complexType name="Citation_Information_A_Type">
+    <xsd:sequence>
+
+      <xsd:element name="Originator" maxOccurs="unbounded">
+        <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Publication_Date">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="4"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Title">
+         <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      
+      <xsd:element name="Alternate_Title" minOccurs="0" maxOccurs="1">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+
+      <xsd:element name="Other_Citation_Details"  minOccurs="0">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <!-- Used for Cross_Reference in Section 1 -->
+  <xsd:complexType name="Citation_Information_B_Type">
+    <xsd:sequence>
+      
+      <xsd:element name="Originator" maxOccurs="unbounded">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+
+ 
+      <xsd:element name="Publication_Date">
+        <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="4"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Title">
+        <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      
+      <xsd:element name="Alternate_Title" minOccurs="0" maxOccurs="1">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <!--<xsd:element name="Other_Citation_Details" type="mtag:vstring" minOccurs="0"/> -->
+      <xsd:element name="Online_Linkage" minOccurs="0" maxOccurs="unbounded">
+        <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:enumeration value="http://www.census.gov/geo/www/tiger"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+        
+
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+ <!-- Used in Cition in Section 1 -->
+  <xsd:complexType name="Citation_Information_C_Type">
+    <xsd:sequence>
+      
+       <xsd:element name="Originator" maxOccurs="unbounded">
+         <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Publication_Date">
+        <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="4"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Title">
+         <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      
+      <xsd:element name="Alternate_Title" minOccurs="0" maxOccurs="1">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Edition" minOccurs="0">
+         <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="4"/>
+            <!-- <xsd:enumeration value="2011"/> -->
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>          
+
+      <xsd:element name="Geospatial_Data_Presentation_Form" 
+                   type="citi:Geospatial_Data_Presentation_Form_Type"/>
+      <xsd:element name="Series_Information" minOccurs="0">
+        <xsd:complexType>  
+          <xsd:sequence>
+            <xsd:element name="Series_Name" type="mtag:vstring"/>
+            <xsd:element name="Issue_Identification" type="mtag:vstring"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Other_Citation_Details" minOccurs="0">
+         <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:element>
+
+      <xsd:element name="Online_Linkage" maxOccurs="unbounded">
+        <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+ <!-- Used for the Repository_Type -->
+ <xsd:complexType name="Citation_Information_D_Type">
+    <xsd:sequence>
+      
+      <xsd:element name="Originator" maxOccurs="unbounded">
+        <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Publication_Date">
+       <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="4"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Title">
+         <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      
+      <xsd:element name="Alternate_Title" minOccurs="0" maxOccurs="1">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Edition" minOccurs="0">
+        <xsd:simpleType>
+         <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Geospatial_Data_Presentation_Form" 
+                   type="citi:Geospatial_Data_Presentation_Form_Type" minOccurs="0"/>
+      <xsd:element name="Series_Information" minOccurs="0">
+        <xsd:complexType>  
+          <xsd:sequence>
+            <xsd:element name="Series_Name" type="mtag:vstring"/>
+            <xsd:element name="Issue_Identification" type="mtag:vstring"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Other_Citation_Details"  minOccurs="0">
+<xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:element>
+
+      <xsd:element name="Online_Linkage" type="mtag:vstring" 
+                   minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType> 
+
+  <xsd:simpleType name="Geospatial_Data_Presentation_Form_Type">
+    <xsd:union>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:minLength value="1"/>
+          <xsd:enumeration value="atlas"/>
+          <xsd:enumeration value="audio"/>
+          <xsd:enumeration value="diagram"/>
+          <xsd:enumeration value="document"/>
+          <xsd:enumeration value="globe"/>
+          <xsd:enumeration value="map"/>
+          <xsd:enumeration value="model"/>
+          <xsd:enumeration value="multimedia presentation"/>
+          <xsd:enumeration value="profile"/>
+          <xsd:enumeration value="raster digital data"/>
+          <xsd:enumeration value="remote-sensing image"/>
+          <xsd:enumeration value="section"/>
+          <xsd:enumeration value="spreadsheet"/>
+          <xsd:enumeration value="tabular digital data"/>
+          <xsd:enumeration value="vector digital data"/>
+          <xsd:enumeration value="video"/>
+          <xsd:enumeration value="view"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:union>
+  </xsd:simpleType>
+
+</xsd:schema>

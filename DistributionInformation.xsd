@@ -1,0 +1,465 @@
+<?xml version="1.0"?>
+<xsd:schema targetNamespace="../xsd/DistributionInformation"
+            xmlns:di="../xsd/DistributionInformation"
+            xmlns:coni="../xsd/ContactInformation"
+            xmlns:mtag="../xsd/MiscTypesAndGroups"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xdb="http://xmlns.oracle.com/xdb">
+
+  <xsd:import namespace="../xsd/ContactInformation" schemaLocation="../xsd/ContactInformation.xsd"/>
+
+  <xsd:import namespace="../xsd/MiscTypesAndGroups" schemaLocation="../xsd/MiscTypesAndGroups.xsd"/>
+
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+      Name:  ContactInformation.xsd
+      Authors:  James W. Allor, Matthew J. McCready
+      Date:  20050315
+      Description:  Validating XML Schema for the Distribution Information
+                    section. Please reference the Census Bureau Geospatial
+                    Product Metadata Standard (GPMS), Table 1.
+                    
+      Modification History:
+        Initial   Date     Change Request ID    Description
+        JWA     20050315    N/A                  Initial Version
+        JWA     20051115    N/A                  Updated to reflect current GPMS Table 1.
+
+        JWA     20051201    N/A                  Added types and attributes for Oracle XML DB.
+        JWA     20051215    N/A                  Changed xsd:string to mtag:vstring to validate elements have a value.
+        MMC     20071206    N/A                  Modified so that Resource_Description, Distribution_Liability, Non-Digital_Form, Network_Resource_Name,Fees, 
+                                                  Ordering_Instructions and Technical_Prerequisites all have to have a minimum string length of 1 character.
+        MMC     20071210    N/A                  Modified Format_Name and File_Decompression_Technique to have both an enumerated list and a minimum string length of 1.
+        MMC     20071211    N/A                  Modified File_Decomopression_Technique so that PK-ZIP, version 1.93 A or higher is included in the enumeration list.
+        MMC     20080616    N/A                  Xpaths modified to mirror the directory structure on node104.
+        MMC     20100624    N/A                  Modified File_Decomopression_Technique so that No compression technique is included in the enumeration list.
+        MMC     20200901    N/A                  Modified Network_Resource_Name so that it will only accept a value of "http://www.census.gov/geo/www/tiger"
+        MMC     20111205    N/A                  Modified File_Decomopression_Technique so that no enumeration list is used. This allows free text.          
+    </xsd:documentation>
+  </xsd:annotation>
+
+
+  <xsd:complexType name="Legacy_Atlas_Type">
+    <xsd:sequence>
+      <xsd:element name="Distributor" type="coni:Some_Optional_Type"/>
+
+      <xsd:element name="Resource_Description" minOccurs="0">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+      <xsd:element name="Distribution_Liability">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+
+
+      <xsd:element name="Standard_Order_Process" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:choice>
+
+              <xsd:element name="Non-Digital_Form">
+               <xsd:simpleType>
+                <xsd:restriction base="mtag:vstring">
+                 <xsd:minLength value="1"/>
+                </xsd:restriction>
+               </xsd:simpleType>
+              </xsd:element>
+
+              <xsd:element name="Digital_Form" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="Format_Name" type="di:Format_Name_Type"/>
+                    <xsd:element name="File_Decompression_Technique"/> <!-- type="di:File_Decompression_Technique_Type" -->
+                    <xsd:element name="Transfer_Size" type="di:positiveFloat"  minOccurs="0"/>
+                    <xsd:element name="Digital_Transfer_Option" 
+                                 maxOccurs="unbounded">
+                      <xsd:complexType>
+                        <!-- <xsd:choice> -->
+			                 <xsd:sequence>
+                          <xsd:element name="Network_Resource_Name"  minOccurs="0" maxOccurs="unbounded">
+                           <xsd:simpleType>
+                            <xsd:restriction base="mtag:vstring">
+                             <xsd:minLength value="1"/>
+                            </xsd:restriction>
+                          </xsd:simpleType>
+                         </xsd:element>   
+                                  
+
+                          <xsd:group ref="di:Offline_Option_Group" minOccurs="0"/>
+                        <!-- </xsd:choice> -->
+			</xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:choice>
+
+            <xsd:element name="Fees">
+             <xsd:simpleType>
+              <xsd:restriction base="mtag:vstring">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+            </xsd:element>
+
+          <xsd:element name="Ordering_Instructions" minOccurs="0">
+            <xsd:simpleType>
+             <xsd:restriction base="mtag:vstring">
+              <xsd:minLength value="1"/>
+             </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+       
+      <xsd:element name="Technical_Prerequisites"  minOccurs="0">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Map_Type">
+    <xsd:complexContent>
+      <xsd:extension base="di:Legacy_Atlas_Type"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Vector_Type">
+    <xsd:sequence>
+      <xsd:element name="Distributor" type="coni:Some_Optional_Type"/>
+
+      <xsd:element name="Resource_Description" minOccurs="0">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+
+      <xsd:element name="Distribution_Liability">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+
+      <xsd:element name="Standard_Order_Process" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>            
+             <xsd:element name="Digital_Form" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:sequence>
+
+                  <xsd:element name="Format_Name" type="di:Format_Name_Type"/>
+                  <xsd:element name="File_Decompression_Technique" 
+                               /><!-- type="di:File_Decompression_Technique_Type" -->
+                  <xsd:element name="Transfer_Size" type="di:positiveFloat"
+                               minOccurs="0"/>
+                  <xsd:element name="Digital_Transfer_Option" maxOccurs="unbounded">
+                    <xsd:complexType>
+                     <!--  <xsd:choice> -->
+			<xsd:sequence>
+
+                        <xsd:element name="Network_Resource_Name" minOccurs="0"  maxOccurs="unbounded">
+                         <xsd:simpleType>
+                          <xsd:restriction base="mtag:vstring">
+                           <xsd:minLength value="1"/>
+                            
+                           <!-- <xsd:enumeration value="http://www.census.gov/geo/www/tiger"/>-->
+                          </xsd:restriction>
+                         </xsd:simpleType>
+                        </xsd:element>
+
+
+                        <xsd:group ref="di:Offline_Option_Group" minOccurs="0" />
+                     <!--  </xsd:choice> -->
+			</xsd:sequence>
+                    </xsd:complexType>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="Fees">
+             <xsd:simpleType>
+              <xsd:restriction base="mtag:vstring">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+            </xsd:element> 
+
+            <xsd:element name="Ordering_Instructions" minOccurs="0">
+             <xsd:simpleType>
+              <xsd:restriction base="mtag:vstring">
+               <xsd:minLength value="1"/>
+              </xsd:restriction>
+             </xsd:simpleType>
+            </xsd:element>
+
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+       
+      <xsd:element name="Technical_Prerequisites" minOccurs="1">
+       <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="KML_Type">
+    <xsd:sequence>
+      <xsd:element name="Distributor" type="coni:Some_Optional_Type"/>
+      
+      <xsd:element name="Resource_Description" minOccurs="0">
+        <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      
+      
+      <xsd:element name="Distribution_Liability">
+        <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      
+      
+      <xsd:element name="Standard_Order_Process" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>            
+            <xsd:element name="Digital_Form" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:sequence>
+                  
+                  <xsd:element name="Format_Name" type="di:Format_Name_Type"/>
+                  <xsd:element name="File_Decompression_Technique" minOccurs="1"/><!-- type="di:File_Decompression_Technique_Type" -->
+                  <xsd:element name="Transfer_Size" type="di:positiveFloat" minOccurs="0"/>
+                 
+                  <xsd:element name="Digital_Transfer_Option" maxOccurs="unbounded">
+                      
+                    <xsd:complexType>
+                      <!--  <xsd:choice> -->
+                      <xsd:sequence>
+                        
+                        <xsd:element name="Network_Resource_Name" minOccurs="0"  maxOccurs="unbounded">
+                          <xsd:simpleType>
+                            <xsd:restriction base="mtag:vstring">
+                              <xsd:minLength value="1"/>
+                              
+                              <!-- <xsd:enumeration value="http://www.census.gov/geo/www/tiger"/>-->
+                            </xsd:restriction>
+                          </xsd:simpleType>
+                        </xsd:element>
+                        
+                        
+                        <xsd:group ref="di:Offline_Option_Group" minOccurs="0" />
+                        <!--  </xsd:choice> -->
+                      </xsd:sequence>
+                    </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Online_Description" minOccurs="0"/>
+                </xsd:sequence>
+                 
+              </xsd:complexType>
+            </xsd:element>
+            
+            <xsd:element name="Fees">
+              <xsd:simpleType>
+                <xsd:restriction base="mtag:vstring">
+                  <xsd:minLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element> 
+            
+            <xsd:element name="Ordering_Instructions" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="mtag:vstring">
+                  <xsd:minLength value="1"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      
+      <xsd:element name="Technical_Prerequisites" minOccurs="1">
+        <xsd:simpleType>
+          <xsd:restriction base="mtag:vstring">
+            <xsd:minLength value="1"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Tabular_Type">
+    <xsd:complexContent>
+      <xsd:extension base="di:Legacy_Atlas_Type"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Repository_Type">
+    <xsd:complexContent>
+      <xsd:extension base="di:Legacy_Atlas_Type"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+
+<!-- Simple Type and Group Definitions -->
+
+  <xsd:simpleType name="Format_Name_Type">
+    <xsd:union>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="ARCE"/> <!-- ARC/INFO Export format -->
+          <xsd:enumeration value="ARCG"/> <!-- ARC/INFO Generate format -->
+          <xsd:enumeration value="ASCII"/> <!-- ASCII FILE, formatted for text attributes, declared format -->
+          <xsd:enumeration value="BIL"/> <!-- Imagery, band interleaved by line -->
+          <xsd:enumeration value="BIP"/> <!-- Imagery, band interleaved by pixel -->
+          <xsd:enumeration value="BSQ"/> <!-- Imagery, band interleaved sequential -->
+          <xsd:enumeration value="CDF"/> <!-- Common Data Format -->
+          <xsd:enumeration value="CFF"/> <!-- Cartographic Feature File (US Forest Service) -->
+          <xsd:enumeration value="COORD"/> <!-- User-created coordinate file, declared format -->
+          <xsd:enumeration value="DEM"/> <!-- Digital Elevation Model format (US Geological Survey) -->
+          <xsd:enumeration value="DFAD"/> <!-- Digital Feature Analysis Data (NIMA) -->
+          <xsd:enumeration value="DGN"/> <!-- Microstation Format (Intergraph) -->
+          <xsd:enumeration value="DIGEST"/> <!-- Digital Geographic Information Exchange Standard -->
+          <xsd:enumeration value="DLG"/> <!-- Digital Line Graph (US Geological Survey) -->
+          <xsd:enumeration value="DTED"/> <!-- Digital Terrain Elevation Data (MIL-D-89020) -->
+          <xsd:enumeration value="DWG"/> <!-- AutoCAD Drawing format -->
+          <xsd:enumeration value="DX90"/> <!-- Data Exchange '90 -->
+          <xsd:enumeration value="DXF"/> <!-- AutoCAD Drawing Exchange Format -->
+          <xsd:enumeration value="ERDAS"/> <!-- ERDAS image files (ERDAS Corporation) -->
+          <xsd:enumeration value="GRASS"/> <!-- Geographic Resources Analysis Support System -->
+          <xsd:enumeration value="HDF"/> <!-- Hierarchical Data Format -->
+          <xsd:enumeration value="IGDS"/> <!-- Interactive Graphic Design System format (Intergraph Corporation) -->
+          <xsd:enumeration value="IGES"/> <!-- Initial Graphics Exchange Standard -->
+          <xsd:enumeration value="MOSS"/> <!-- Multiple Overlay Statistical System export file -->
+          <xsd:enumeration value="netCDF"/> <!-- network Common Data Format -->
+          <xsd:enumeration value="NITF"/> <!-- National Imagery Transfer Format -->
+          <xsd:enumeration value="RPF"/> <!-- Raster Product Format -->
+          <xsd:enumeration value="RVC"/> <!-- Raster Vector Converted format (MicroImages) -->
+          <xsd:enumeration value="RVF"/> <!-- Raster Vector Format (MicroImages) -->
+          <xsd:enumeration value="SDTS"/> <!-- Spatial Data Transfer Standard (FIPS 173) -->
+          <xsd:enumeration value="SIF"/> <!-- Standar Interchange Format (DOD Proj 2851) -->
+          <xsd:enumeration value="SLF"/> <!-- Standard Linear Format (NIMA> -->
+          <xsd:enumeration value="TIFF"/> <!-- Tagged Image File Format -->
+          <xsd:enumeration value="TGRLN"/> <!-- Tiger Line -->
+          <xsd:enumeration value="VPF"/> <!-- Vector Product Format (NIMA) -->
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:minLength value="1"/>
+        </xsd:restriction> 
+      </xsd:simpleType>
+    </xsd:union>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="File_Decompression_Technique_Type">
+    <xsd:union>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="No compression applied"/>
+          <xsd:enumeration value="PK-ZIP, version 1.93 A or higher"/>
+          <xsd:enumeration value="The files were compressed using Linux-based Info-ZIP Zip 2.32. Files can be decompressed with PK-ZIP, version 1.93A or higher, WinZip or other decompression software packages"/>
+<xsd:enumeration value="The files were compressed using Linux-based Info-ZIP Zip 2.32. Files can be decompressed with PK-ZIP, version 1.93A or higher, WinZip or other decompression software packages"/>        
+  <xsd:enumeration value="No compression technique"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring">
+         <xsd:enumeration value="No compression applied"/>
+          <xsd:enumeration value="The files were compressed using Linux-based Info-ZIP Zip 2.32. Files can be decompressed with PK-ZIP, version 1.93A or higher, WinZip or other decompression software packages"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:union>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="positiveFloat">
+    <xsd:restriction base="xsd:float">
+      <xsd:minExclusive value="0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:group name="Offline_Option_Group">
+    <xsd:sequence>
+
+      <xsd:element name="Offline_Media" type="di:Offline_Media_Type"/>
+      <xsd:element name="Recording_Format" type="di:Recording_Format_Type"
+                   maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:group>
+
+  <xsd:simpleType name="Offline_Media_Type">
+    <xsd:union>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="CD-ROM"/>
+          <xsd:enumeration value="3-1/2 inch floppy disk"/>
+          <xsd:enumeration value="5-1/4 inch floppy disk"/>
+          <xsd:enumeration value="9-track tape"/>
+          <xsd:enumeration value="4 mm cartridge tape"/>
+          <xsd:enumeration value="8 mm cartridge tape"/>
+          <xsd:enumeration value="1/4-inch cartridge tape"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring"/>
+      </xsd:simpleType>
+    </xsd:union>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="Recording_Format_Type">
+    <xsd:union>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="cpio"/>
+          <xsd:enumeration value="tar"/>
+          <xsd:enumeration value="High Sierra"/>
+          <xsd:enumeration value="ISO 9660"/>
+          <xsd:enumeration value="ISO 9660 with Rock Ridge extensions"/>
+          <xsd:enumeration value="ISO 9660 with Apple HFS extensions"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType>
+        <xsd:restriction base="mtag:vstring"/>
+      </xsd:simpleType>
+    </xsd:union>
+  </xsd:simpleType>
+
+</xsd:schema>

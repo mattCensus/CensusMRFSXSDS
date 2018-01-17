@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:ii="../xsd/IdentificationInformation"
+            xmlns:dqi="../xsd/DataQualityInformation"
+            xmlns:sri="../xsd/SpatialReferenceInformation"
+            xmlns:eaai="../xsd/EntityAndAttributeInformation"
+            xmlns:di="../xsd/DistributionInformation"
+            xmlns:mri="../xsd/MetadataReferenceInformation"
+            xmlns:mtag="../xsd/MiscTypesAndGroups"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xdb="http://xmlns.oracle.com/xdb">
+
+
+<!-- batch-->
+  <xsd:import namespace="../xsd/IdentificationInformation"
+              schemaLocation="../xsd/IdentificationInformation.xsd"/>
+  <xsd:import namespace="../xsd/DataQualityInformation"
+              schemaLocation="../xsd/DataQualityInformation.xsd"/>
+  <xsd:import namespace="../xsd/SpatialReferenceInformation"
+              schemaLocation="../xsd/SpatialReferenceInformation.xsd"/>
+  <xsd:import namespace="../xsd/EntityAndAttributeInformation"
+              schemaLocation="../xsd/EntityAndAttributeInformation.xsd"/>
+  <xsd:import namespace="../xsd/DistributionInformation"
+              schemaLocation="../xsd/DistributionInformation.xsd"/>
+  <xsd:import namespace="../xsd/MetadataReferenceInformation"
+              schemaLocation="../xsd/MetadataReferenceInformation.xsd"/>
+  <xsd:import namespace="../xsd/MiscTypesAndGroups" 
+              schemaLocation="../xsd/MiscTypesAndGroups.xsd"/>
+
+            
+            
+            
+            <!-- Local Computer file:/U:/ReleasedPerlScriptsandSchemas/XSLTSSchemsaModules/xsd/Map.xsd     
+            <xsd:import namespace="../xsd/IdentificationInformation"
+                        schemaLocation="file:/U:/ReleasedPerlScriptsandSchemas/XSLTSSchemsaModules/xsd/IdentificationInformation.xsd"/>
+            <xsd:import namespace="../xsd/DataQualityInformation"
+                        schemaLocation="file:/U:/ReleasedPerlScriptsandSchemas/XSLTSSchemsaModules/xsd/DataQualityInformation.xsd"/>
+            <xsd:import namespace="../xsd/SpatialReferenceInformation"
+                        schemaLocation="/file:/U:/ReleasedPerlScriptsandSchemas/XSLTSSchemsaModules/xsd/SpatialReferenceInformation.xsd"/>
+            <xsd:import namespace="../xsd/EntityAndAttributeInformation"
+                        schemaLocation="/file:/U:/ReleasedPerlScriptsandSchemas/XSLTSSchemsaModules/xsd/EntityAndAttributeInformation.xsd"/>
+            <xsd:import namespace="../xsd/DistributionInformation"
+                        schemaLocation="file:/U:/ReleasedPerlScriptsandSchemas/XSLTSSchemsaModules/xsd/DistributionInformation.xsd"/>
+            <xsd:import namespace="../xsd/MetadataReferenceInformation"
+                        schemaLocation="file:/U:/ReleasedPerlScriptsandSchemas/XSLTSSchemsaModules/xsd/MetadataReferenceInformation.xsd"/>
+            <xsd:import namespace="../xsd/MiscTypesAndGroups" 
+                        schemaLocation="file:/U:/ReleasedPerlScriptsandSchemas/XSLTSSchemsaModules/xsd/MiscTypesAndGroups.xsd"/>  --> 
+            
+  <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+          Name:  Map.xsd
+          Authors:  James W. Allor, Matthew J. McCready
+          Date:  20051128
+          Description: XML schema to validate MRF documents using the map profile.
+          Please reference the GPMS, Table 1.
+
+          Modification History:
+              Initial        Date        Change Request ID        Description
+              JWA            20051128    N/A                      Initial version
+              MMC            20080617    N/A                      Xpaths modified to mirror the
+                                                                   directory structure on node104.
+      </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:element name="MRF">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Identification_Information" type="ii:Map_Type"/>
+        <xsd:element name="Data_Quality_Information" type="dqi:Map_Type"/>
+        <xsd:element name="Spatial_Reference_Information" type="sri:Map_Type"/>
+        <xsd:element name="Entity_and_Attribute_Information" type="eaai:Map_Type" minOccurs="0"/>
+        <xsd:element name="Distribution_Information" type="di:Map_Type"/>
+        <xsd:element name="Metadata_Reference_Information" type="mri:Map_Type"/>
+      </xsd:sequence>
+      <xsd:attribute name="profile_type" type="mtag:profile_type_Type"/>
+    </xsd:complexType>
+  </xsd:element>
+
+</xsd:schema>
