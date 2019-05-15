@@ -298,9 +298,6 @@ Boundaries are those defined by OMB based on the 2010 Census, published in 2013,
                </gmd:otherConstraints>
                <!--changed "useConstraint=othe restrictions/code 008", above, to "trademark/code 004" and added missing value before closing tag-->
                <gmd:otherConstraints>
-                  <gco:CharacterString> Access Constraints: None</gco:CharacterString>
-               </gmd:otherConstraints>
-               <gmd:otherConstraints>
                   <gco:CharacterString> Use Constraints:The TIGER/Line Shapefile products are not copyrighted however TIGER/Line and Census TIGER are registered trademarks of the U.S. Census Bureau.  These products are free to use in a product or publication, however acknowledgement must be given to the U.S. Census Bureau as the source.
 The boundary information in the TIGER/Line Shapefiles are for statistical data collection and tabulation purposes only; their depiction and designation for statistical purposes does not constitute a determination of jurisdictional authority or rights of ownership or entitlement and they are not legal land descriptions. Coordinates in the TIGER/Line shapefiles have six implied decimal places, but the positional accuracy of these coordinates is not as great as the six decimal places suggest.</gco:CharacterString>
                </gmd:otherConstraints>
@@ -478,16 +475,16 @@ The boundary information in the TIGER/Line Shapefiles are for statistical data c
                <gmd:onLine>
                   <gmd:CI_OnlineResource>
                      <gmd:linkage>
-                        <gmd:URL>https://www.census.gov/geo/maps-data/data/tiger-line.html</gmd:URL>
+                        <gmd:URL>hhttps://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html</gmd:URL>
                         <!--Above URL redirects to program page. Is there a more direct link? https:tigerweb.geo.census.gov/tigerweb?-->
                      </gmd:linkage>
                      <gmd:name>
-                        <gco:CharacterString>TIGER/Line Shapefile Viewer</gco:CharacterString>
+                        <gco:CharacterString>TIGER/Line Shapefiles Directory</gco:CharacterString>
                         <!--Added 'Viewer' to above name, edit if inaccurate-->
                      </gmd:name>
                      <gmd:description>
-                        <gco:CharacterString>Should be used for most mapping projects--this is our most comprehensive dataset. Designed for use with GIS
-                                                            (geographic information systems).</gco:CharacterString>
+                        <gco:CharacterString>TIGER/Line Files do not include demographic data, but they do contain geographic entity codes (GEOIDs) that can be
+                           linked to the Census Bureau’s demographic data, available on American FactFinder.</gco:CharacterString>
                         <!--Is this accurate? Doesn't seem like viewer would be used to populate GIS. Update with description of viewer-->
                      </gmd:description>
                      <gmd:function>
